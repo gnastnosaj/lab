@@ -25,6 +25,7 @@
     "@better-scroll/core": "^2.0.0-alpha.15",
     "@better-scroll/pull-down": "^2.0.0-alpha.15",
     "@better-scroll/pull-up": "^2.0.0-alpha.15",
+    "@fancyapps/fancybox": "^3.5.7",
     "core-js": "^2.5.4",
     "imagesloaded": "^4.1.4",
     "jquery": "^3.4.1",

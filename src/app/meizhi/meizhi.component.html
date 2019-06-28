@@ -1,14 +1,14 @@
 <div class="container">
     <div #scrollable>
         <div>
-            <div *ngIf="refreshing">Refreshing...</div>
+            <div class="refreshing" *ngIf="refreshing">Refreshing...</div>
             <div class="waterfall" #waterfall>
-                <div class="item" *ngFor="let meizhi of data">
+                <div class="item" *ngFor="let meizhi of data" (click)="show(meizhi)">
                     <img [src]="meizhi.links[0]" />
                     <span>{{meizhi.title}}</span>
                 </div>
             </div>
-            <div *ngIf="loading">Loading...</div>
+            <div class="loading" *ngIf="loading">Loading...</div>
         </div>
     </div>
 </div>

@@ -6,6 +6,7 @@ import { Meizhi } from './meizhi';
 import { ApiService } from './api.service';
 import * as Masonry from 'masonry-layout';
 import * as imagesLoaded from 'imagesloaded';
+import * as $ from 'jquery';
 
 BScroll.use(PullDown);
 BScroll.use(Pullup);
@@ -37,7 +38,11 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     this.scroll = new BScroll(this.scrollable.nativeElement, {
       scrollY: true,
       pullDownRefresh: true,
-      pullUpLoad: true
+      pullUpLoad: true,
+      preventDefaultException: {
+        className: /(^|\s)item(\s|$)/
+      },
+      click: true
     }).on('scroll', () => {
       if (!this.loading && this.waterfall.nativeElement.clientHeight < this.scrollable.nativeElement.clientHeight) {
         this.loading = true;
@@ -64,15 +69,32 @@ export class MeizhiComponent implements OnInit, OnDestroy {
       }
     });
     this.masonry = new Masonry(this.waterfall.nativeElement, {
-      itemSelector: '.item'
+      itemSelector: '.item',
+      hiddenStyle: {
+        transform: 'translateY(100px)',
+        opacity: 0
+      },
+      visibleStyle: {
+        transform: 'translateY(0px)',
+        opacity: 1
+      }
     });
 
     this.mutationObserver = new MutationObserver((mutations) => {
-      if (mutations.some(record => record.addedNodes.length > 0 || record.removedNodes.length > 0)) {
-        this.masonry.reloadItems();
-        imagesLoaded(this.waterfall.nativeElement).on('progress', () => {
-          this.masonry.layout();
-          this.scroll.refresh();
+      if (mutations.some(mutation => mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach((node: HTMLElement) => {
+            node.style.display = 'none';
+            imagesLoaded(node).on('progress', () => {
+              node.style.display = 'block';
+              this.masonry.appended(node);
+              this.masonry.layout();
+              this.scroll.refresh();
+            });
+          });
+          mutation.removedNodes.forEach(node => {
+            this.masonry.remove(node);
+          });
         });
       }
     });
@@ -85,6 +107,19 @@ export class MeizhiComponent implements OnInit, OnDestroy {
       this.data = data;
       this.refreshing = false;
     });
+  }
+
+  show(meizhi: Meizhi) {
+    $['fancybox'].open(
+      meizhi.links.map(link => {
+        return {
+          src: link
+        };
+      }),
+      {
+        loop: false
+      }
+    );
   }
 
   ngOnDestroy() {
