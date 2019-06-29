@@ -6,7 +6,6 @@ import { Meizhi } from './meizhi';
 import { ApiService } from './api.service';
 import * as Masonry from 'masonry-layout';
 import * as imagesLoaded from 'imagesloaded';
-import * as $ from 'jquery';
 
 BScroll.use(PullDown);
 BScroll.use(Pullup);
@@ -110,14 +109,19 @@ export class MeizhiComponent implements OnInit, OnDestroy {
   }
 
   show(meizhi: Meizhi) {
-    $['fancybox'].open(
+    $.fancybox.open(
       meizhi.links.map(link => {
         return {
           src: link
         };
       }),
       {
-        loop: false
+        arrows: false,
+        buttons: [
+          'download',
+          'thumbs',
+          'close'
+        ]
       }
     );
   }

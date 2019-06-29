@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as $ from 'jquery';
 
 import { Engine } from './engine';
 import { Magneto } from '../magneto';
