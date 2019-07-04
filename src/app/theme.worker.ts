@@ -22,7 +22,7 @@ let fileCache = {};
 less.FileManager.prototype.clearFileCache = () => {
   fileCache = {};
 };
-less.FileManager.prototype.loadFile = function (filename, currentDirectory, options) {
+less.FileManager.prototype.loadFile = function(filename, currentDirectory, options) {
   if (currentDirectory && !this.isPathAbsolute(filename)) {
     filename = currentDirectory + filename;
   }
@@ -42,7 +42,7 @@ less.FileManager.prototype.loadFile = function (filename, currentDirectory, opti
     }
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
-      if (xhr.readyState == 4) {
+      if (xhr.readyState === 4) {
         if (xhr.status >= 200 && xhr.status < 300) {
           fileCache[href] = xhr.responseText;
           resolve({ contents: xhr.responseText, filename: href, webInfo: { lastModified: xhr.getResponseHeader('Last-Modified') } });
