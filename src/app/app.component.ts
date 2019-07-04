@@ -138,7 +138,7 @@ export class AppComponent {
   loading = false;
 
   menus = [{
-    title: '妹纸',
+    title: 'Meizhi',
     path: 'meizhi'
   }, {
     title: 'Magneto',
