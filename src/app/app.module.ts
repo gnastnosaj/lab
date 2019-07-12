@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
-import isElectron from 'is-electron';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
@@ -28,7 +27,7 @@ registerLocaleData(zh);
     SharedModule,
     NgZorroAntdModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: !isElectron() && environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production && !environment.electron })
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

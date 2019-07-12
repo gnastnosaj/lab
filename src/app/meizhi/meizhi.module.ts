@@ -11,6 +11,7 @@ import { MeizhiRoutingModule } from './meizhi-routing.module';
 import { MeizhiComponent } from './meizhi.component';
 
 import { CorsInterceptor } from '../shared/cors-interceptor';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,7 @@ import { CorsInterceptor } from '../shared/cors-interceptor';
     imports: [CommonModule, HttpClientModule, FormsModule, SharedModule, NgZorroAntdModule, MeizhiRoutingModule],
     providers: [
         ApiService,
-        { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
+        ...(environment.electron ? [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }] : [])
     ]
 })
 export class MeizhiModule { }
