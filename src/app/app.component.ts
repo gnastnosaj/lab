@@ -14,7 +14,11 @@ import 'less';
       <div [ngStyle]="{'transform': transform}">
         <app-lottie path="assets/lottie/loading.line.contrast.{{currentTheme}}.json"></app-lottie>
       </div>
+      <div class="placeholder"></div>
       <img src="assets/images/favicon.png">
+      <div class="placeholder">
+        <app-lottie path="assets/lottie/loading.json"></app-lottie>
+      </div>
     </div>
     <ng-container *ngIf="styles.fuchisa">
       <main *ngIf="!loading"><router-outlet></router-outlet></main>
@@ -52,7 +56,7 @@ import 'less';
     </ng-container>
   `,
   styles: [`
-    .splash > div {
+    .splash > div:first-of-type {
       position: fixed;
       top: 0px;
       width: 100vw;
@@ -60,10 +64,18 @@ import 'less';
       overflow: hidden;
     }
 
-    .splash > div ::ng-deep svg {
+    .splash > div:first-of-type ::ng-deep svg {
       width: 100vw !important;
       height: 100px !important;
       margin-top: -50px;
+    }
+
+    .splash > div:last-of-type {
+      width: 100px;
+    }
+
+    .splash > .placeholder {
+      flex: 1;
     }
 
     header {
