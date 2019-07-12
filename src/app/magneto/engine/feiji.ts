@@ -17,7 +17,7 @@ export class EngineImpl extends Engine {
                 });
         } else {
             observable = this.http.get(`https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(
-                `http://feijibtba.live/list/${encodeURIComponent(keyword)}/${index}/0/0.html`
+                `http://feijibtba.me/list/${encodeURIComponent(keyword)}/${index}/0/0.html`
             )}`, { responseType: 'text' });
         }
         return observable.pipe(
