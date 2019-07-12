@@ -28,7 +28,7 @@ registerLocaleData(zh);
     SharedModule,
     NgZorroAntdModule,
     AppRoutingModule,
-    ...(isElectron() ? [] : [ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })])
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: !isElectron() && environment.production })
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },

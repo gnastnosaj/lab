@@ -11,7 +11,6 @@ import { MeizhiRoutingModule } from './meizhi-routing.module';
 import { MeizhiComponent } from './meizhi.component';
 
 import { CorsInterceptor } from '../shared/cors-interceptor';
-import isElectron from 'is-electron';
 
 @NgModule({
     declarations: [
@@ -20,7 +19,7 @@ import isElectron from 'is-electron';
     imports: [CommonModule, HttpClientModule, FormsModule, SharedModule, NgZorroAntdModule, MeizhiRoutingModule],
     providers: [
         ApiService,
-        ...(!isElectron() ? [] : [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }])
+        { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
     ]
 })
 export class MeizhiModule { }

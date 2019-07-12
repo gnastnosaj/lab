@@ -11,7 +11,6 @@ import { MagnetoRoutingModule } from './magneto-routing.module';
 import { MagnetoComponent } from './magneto.component';
 
 import { CorsInterceptor } from '../shared/cors-interceptor';
-import isElectron from 'is-electron';
 
 @NgModule({
     declarations: [
@@ -21,7 +20,7 @@ import isElectron from 'is-electron';
 
     providers: [
         ApiService,
-        ...(!isElectron() ? [] : [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }])
+        { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
     ]
 })
 export class MagnetoModule { }
