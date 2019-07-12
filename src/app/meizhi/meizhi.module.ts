@@ -20,7 +20,7 @@ import isElectron from 'is-electron';
     imports: [CommonModule, HttpClientModule, FormsModule, SharedModule, NgZorroAntdModule, MeizhiRoutingModule],
     providers: [
         ApiService,
-        ...(isElectron() ? [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }] : [])
+        ...(!isElectron() ? [] : [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }])
     ]
 })
 export class MeizhiModule { }

@@ -21,7 +21,7 @@ import isElectron from 'is-electron';
 
     providers: [
         ApiService,
-        ...(isElectron() ? [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }] : [])
+        ...(!isElectron() ? [] : [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }])
     ]
 })
 export class MagnetoModule { }
