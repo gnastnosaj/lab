@@ -20,12 +20,16 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 768,
-    icon: `${__dirname}/app.ico`
+    icon: `${__dirname}/app.ico`,
+    webPreferences: {
+      webSecurity: false
+    }
   });
 
   // mainWindow.webContents.openDevTools();
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
+  //mainWindow.loadURL('http://localhost:4200');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

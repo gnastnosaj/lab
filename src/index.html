@@ -44,6 +44,14 @@
     <div class="splash"><img src="assets/images/favicon.png"></div>
   </app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <script>
+    if (window.require) {
+      window.nodeRequire = window.require;
+      delete window.require;
+      delete window.exports;
+      delete window.module;
+    }
+  </script>
 </body>
 
 </html>

@@ -43,7 +43,7 @@
       "electronWinstallerConfig": {
         "name": "lab",
         "setupIcon": "src/app.ico",
-        "setupExe": "lab-1.0.0.exe",
+        "setupExe": "lab_1.0.0_x64.exe",
         "loadingGif": "src/loading.gif"
       },
       "electronInstallerDebian": {

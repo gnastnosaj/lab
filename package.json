@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --base-href /lab/ --deploy-url /lab/ --prod",
+    "build": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --base-href=/lab/ --deploy-url=/lab/ --prod",
+    "make": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --base-href=./ --deploy-url=./ --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
