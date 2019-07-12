@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -15,7 +13,7 @@ import { MagnetoComponent } from './magneto.component';
     declarations: [
         MagnetoComponent
     ],
-    imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, SharedModule, NgZorroAntdModule, MagnetoRoutingModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule, NgZorroAntdModule, MagnetoRoutingModule],
     providers: [ApiService]
 })
 export class MagnetoModule { }

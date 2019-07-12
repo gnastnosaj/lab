@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -15,7 +13,7 @@ import { MeizhiComponent } from './meizhi.component';
     declarations: [
         MeizhiComponent
     ],
-    imports: [CommonModule, HttpClientModule, FormsModule, SharedModule, NgZorroAntdModule, MeizhiRoutingModule],
+    imports: [CommonModule, FormsModule, SharedModule, NgZorroAntdModule, MeizhiRoutingModule],
     providers: [ApiService]
 })
 export class MeizhiModule { }
