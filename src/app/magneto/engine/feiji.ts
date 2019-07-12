@@ -68,7 +68,6 @@ export class EngineImpl extends Engine {
                         }
                     }
                 }
-                
                 const magneto: Magneto = {
                     data,
                     page
