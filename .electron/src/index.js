@@ -4,6 +4,10 @@ import {
   Menu
 } from 'electron';
 
+import {
+  AIUI
+} from './aiui';
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
@@ -40,12 +44,17 @@ const createWindow = () => {
   });
 };
 
+const aiui = new AIUI();
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   Menu.setApplicationMenu(null);
   createWindow();
+
+  aiui.initialize();
+  aiui.request(new Buffer('我想要搜变形金刚')).then(chunk => console.log(chunk)).catch(err => console.error(err));
 });
 
 // Quit when all windows are closed.
@@ -53,6 +62,7 @@ app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
+    aiui.destroy();
     app.quit();
   }
 });

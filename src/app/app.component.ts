@@ -6,6 +6,7 @@ import { filter, catchError } from 'rxjs/operators';
 
 import { Theme, theme, registerThemes } from './theme.core';
 import 'less';
+import { RxBus } from './rxbus';
 
 @Component({
   selector: 'app-root',
@@ -157,7 +158,15 @@ export class AppComponent {
     path: 'magneto'
   }];
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private rxbus: RxBus) {
+    if (window['nodeRequire']) {
+      const require = window['nodeRequire'];
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.on('ipc', (_, args) => {
+        this.rxbus.post(args.tag, args.payload);
+      });
+    }
+
     const onresize = window.onresize;
     window.onresize = ev => {
       if (onresize instanceof Function) {
