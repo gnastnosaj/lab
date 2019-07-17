@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from './shared/shared.module';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -14,17 +15,21 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AiuiComponent } from './aiui/aiui.component';
 
 registerLocaleData(zh);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AiuiComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     SharedModule,
+    OverlayModule,
     NgZorroAntdModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production && !environment.electron })
@@ -33,6 +38,7 @@ registerLocaleData(zh);
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AiuiComponent]
 })
 export class AppModule { }

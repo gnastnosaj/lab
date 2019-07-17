@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector, NgZone } from '@angular/core';
 import { Router, RouterEvent, NavigationStart } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
@@ -6,7 +6,10 @@ import { filter, catchError } from 'rxjs/operators';
 
 import { Theme, theme, registerThemes } from './theme.core';
 import 'less';
+import { AIUI } from './aiui/aiui';
 import { RxBus } from './rxbus';
+import { HttpClient } from '@angular/common/http';
+import { Overlay } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-root',
@@ -158,17 +161,23 @@ export class AppComponent {
     path: 'magneto'
   }];
 
-  constructor(public router: Router, private rxbus: RxBus) {
-    if (window['nodeRequire']) {
-      const require = window['nodeRequire'];
-      const { ipcRenderer } = require('electron');
-      ipcRenderer.on('ipc', (_, args) => {
-        this.rxbus.post(args.tag, args.payload);
-      });
+  recording: Subscription;
+
+  constructor(public router: Router, private injector: Injector) {
+    const global = window as any;
+    if (global.nodeRequire) {
+      const aiui = Injector.create({
+        providers: [
+          { provide: AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
+        ],
+        parent: this.injector
+      }).get(AIUI);
+
+      aiui.attach();
     }
 
-    const onresize = window.onresize;
-    window.onresize = ev => {
+    const onresize = global.onresize;
+    global.onresize = ev => {
       if (onresize instanceof Function) {
         onresize.call(onresize, ev);
       }
