@@ -25,19 +25,21 @@ export class AiuiComponent implements OnInit {
     if (!this.recording) {
       this.recording = true;
       setTimeout(() => {
-        this.aiui.iat('搜索变形金刚').subscribe(output => {
-          this.aiui.tts(output).subscribe(blob => {
-            console.log(URL);
-            soundManager
-              .createSound({
-                url: URL.createObjectURL(blob),
-                onload() {
-                  this.play();
-                }
-              })
-              .load();
-          });
+        this.aiui.record().subscribe(blob => {
+          console.log(blob);
         });
+        // this.aiui.iat('搜索变形金刚').subscribe(output => {
+        //   this.aiui.tts(output).subscribe(blob => {
+        //     soundManager
+        //       .createSound({
+        //         url: URL.createObjectURL(blob),
+        //         onload() {
+        //           this.play();
+        //         }
+        //       })
+        //       .load();
+        //   });
+        // });
       }, 3000);
     }
   }

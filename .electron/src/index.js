@@ -32,8 +32,8 @@ const createWindow = () => {
 
   // mainWindow.webContents.openDevTools();
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
-  //mainWindow.loadURL('http://localhost:4200');
+  //mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
+  mainWindow.loadURL('http://localhost:4200');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -50,11 +50,10 @@ const aiui = new AIUI();
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  Menu.setApplicationMenu(null);
+  //Menu.setApplicationMenu(null);
   createWindow();
 
   aiui.initialize();
-  aiui.request(new Buffer('我想要搜变形金刚')).then(chunk => console.log(chunk)).catch(err => console.error(err));
 });
 
 // Quit when all windows are closed.
