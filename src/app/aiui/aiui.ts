@@ -92,7 +92,9 @@ export class AIUI {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             responseType: 'arraybuffer'
-        });
+        }).pipe(map(output => new Blob([output], {
+            type: "audio/wav"
+        })));
     }
 
     private request(api: string, apiKey: string, data: any, param: string, options?: any): Observable<any> {
