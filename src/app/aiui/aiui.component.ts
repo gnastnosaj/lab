@@ -24,12 +24,9 @@ export class AiuiComponent implements OnInit {
   startRecording() {
     if (!this.recording) {
       this.recording = true;
-      setTimeout(() => {
-        // this.aiui.record().subscribe(blob => {
-        //   console.log(blob);
-        // });
-        this.aiui.iat('搜索变形金刚').subscribe(output => {
-          this.aiui.tts(output).subscribe(blob => {
+      this.aiui.record().subscribe(buffer => {
+        this.aiui.iat(buffer).subscribe(answer => {
+          this.aiui.tts(answer).subscribe(blob => {
             soundManager
               .createSound({
                 url: URL.createObjectURL(blob),
@@ -40,7 +37,7 @@ export class AiuiComponent implements OnInit {
               .load();
           });
         });
-      }, 3000);
+      });
     }
   }
 

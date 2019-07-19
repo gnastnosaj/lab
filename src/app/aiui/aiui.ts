@@ -3,7 +3,7 @@ import { RxBus } from '../rxbus';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RecordRTC } from 'recordrtc';
-import { Overlay, OverlayRef, GlobalPositionStrategy, OverlayPositionBuilder } from '@angular/cdk/overlay';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { AiuiComponent } from './aiui.component';
 import { map } from 'rxjs/operators';
@@ -59,8 +59,13 @@ export class AIUI {
                     recorder.startRecording();
                     recorder.onStateChanged = state => {
                         if (state === 'stopped') {
-                            subscriber.next(recorder.getBlob());
-                            subscriber.complete();
+                            const blob = recorder.getBlob();
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                subscriber.next(reader.result);
+                                subscriber.complete();
+                            };
+                            reader.readAsArrayBuffer(blob);
                         }
                     };
                 })
@@ -76,10 +81,10 @@ export class AIUI {
         });
     }
 
-    iat(data): Observable<string> {
+    iat(data: any, type: string = 'audio'): Observable<string> {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
-        const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": "text"}`;
+        const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": ${type}}`;
         return this.request(api, apiKey, data, param).pipe(map(output => output.data[0].intent.answer.text));
     }
 
@@ -93,7 +98,7 @@ export class AIUI {
             },
             responseType: 'arraybuffer'
         }).pipe(map(output => new Blob([output], {
-            type: "audio/wav"
+            type: 'audio/wav'
         })));
     }
 
