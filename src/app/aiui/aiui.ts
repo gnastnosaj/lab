@@ -2,13 +2,14 @@ import { NgZone, Injectable } from '@angular/core';
 import { RxBus } from '../rxbus';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RecordRTC } from 'recordrtc';
+import * as RecordRTC from 'recordrtc';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { AiuiComponent } from './aiui.component';
 import { map } from 'rxjs/operators';
 const global = window as any;
 const require = global.nodeRequire;
+// import { soundManager } from 'soundmanager2';
 
 @Injectable()
 export class AIUI {
@@ -47,34 +48,43 @@ export class AIUI {
         }
     }
 
-    record(): Observable<any> {
+    record(handler: (arrayBuffer: ArrayBuffer) => void): Observable<any> {
         return new Observable(subscriber => {
             let recorder: any;
 
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
-                    recorder = new RecordRTC(stream, {
-                        type: 'audio'
+                    recorder = RecordRTC(stream, {
+                        type: 'audio',
+                        mimeType: 'audio/wav',
+                        recorderType: RecordRTC.StereoAudioRecorder,
+                        desiredSampRate: 16000
                     });
                     recorder.startRecording();
-                    recorder.onStateChanged = state => {
-                        if (state === 'stopped') {
-                            const blob = recorder.getBlob();
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                subscriber.next(reader.result);
-                                subscriber.complete();
-                            };
-                            reader.readAsArrayBuffer(blob);
-                        }
-                    };
+                    subscriber.next(recorder);
                 })
                 .catch(err => subscriber.error(err));
 
             return {
                 unsubscribe() {
                     if (recorder != null && recorder.state !== 'stopped') {
-                        recorder.stopRecording();
+                        recorder.stopRecording(() => {
+                            const blob = recorder.getBlob();
+                            // soundManager
+                            //     .createSound({
+                            //         url: URL.createObjectURL(blob),
+                            //         onload() {
+                            //             this.play();
+                            //         }
+                            //     })
+                            //     .load();
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                handler(reader.result as ArrayBuffer);
+                                recorder.destroy();
+                            };
+                            reader.readAsArrayBuffer(blob);
+                        });
                     }
                 }
             };
@@ -84,7 +94,7 @@ export class AIUI {
     iat(data: any, type: string = 'audio'): Observable<string> {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
-        const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": ${type}}`;
+        const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": "${type}"}`;
         return this.request(api, apiKey, data, param).pipe(map(output => output.data[0].intent.answer.text));
     }
 
