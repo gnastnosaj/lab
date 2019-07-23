@@ -6,10 +6,9 @@ import * as RecordRTC from 'recordrtc';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { AiuiComponent } from './aiui.component';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 const global = window as any;
 const require = global.nodeRequire;
-// import { soundManager } from 'soundmanager2';
 
 @Injectable()
 export class AIUI {
@@ -48,8 +47,14 @@ export class AIUI {
         }
     }
 
-    record(handler: (arrayBuffer: ArrayBuffer) => void): Observable<any> {
-        return new Observable(subscriber => {
+    record(handler: (arrayBuffer: ArrayBuffer) => void, text?: string): Observable<any> {
+        return text ? this.tts(text).pipe(tap(blob => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                handler(reader.result as ArrayBuffer);
+            };
+            reader.readAsArrayBuffer(blob);
+        })) : new Observable(subscriber => {
             let recorder: any;
 
             navigator.mediaDevices.getUserMedia({ audio: true })
@@ -70,14 +75,6 @@ export class AIUI {
                     if (recorder != null && recorder.state !== 'stopped') {
                         recorder.stopRecording(() => {
                             const blob = recorder.getBlob();
-                            // soundManager
-                            //     .createSound({
-                            //         url: URL.createObjectURL(blob),
-                            //         onload() {
-                            //             this.play();
-                            //         }
-                            //     })
-                            //     .load();
                             const reader = new FileReader();
                             reader.onload = () => {
                                 handler(reader.result as ArrayBuffer);
@@ -95,10 +92,16 @@ export class AIUI {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
         const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": "${type}"}`;
-        return this.request(api, apiKey, data, param).pipe(map(output => output.data[0].intent.answer.text));
+        return this.request(api, apiKey, data, param).pipe(map(output => {
+            for (const result of output.data) {
+                if (result.sub === 'nlp' && result.intent && result.intent.answer) {
+                    return result.intent.answer.text;
+                }
+            }
+        }));
     }
 
-    tts(text: string): Observable<any> {
+    tts(text: string): Observable<Blob> {
         const api = 'http://api.xfyun.cn/v1/service/v1/tts';
         const apiKey = '2c1b18e6aade7ed6e2637d7d8b266034';
         const param = `{"auf": "audio/L16;rate=16000", "aue": "raw", "voice_name": "xiaoyan"}`;
