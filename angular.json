@@ -47,7 +47,8 @@
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
-              "./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js"
+              "./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js",
+              "./src/recorder.js"
             ],
             "es5BrowserSupport": true,
             "webWorkerTsConfig": "tsconfig.worker.json"

@@ -60,32 +60,26 @@ export class AIUI {
         })) : new Observable(subscriber => {
             let recorder: any;
 
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    recorder = RecordRTC(stream, {
-                        type: 'audio',
-                        mimeType: 'audio/wav',
-                        recorderType: RecordRTC.StereoAudioRecorder,
-                        desiredSampRate: 16000
-                    });
-                    recorder.startRecording();
-                    subscriber.next(recorder);
-                })
-                .catch(err => subscriber.error(err));
+            const Recorder = global.Recorder;
+            recorder = new Recorder({
+                type: "wav",
+                bitRate: 16,
+                sampleRate: 16000
+            });
+            recorder.open(() => {
+                recorder.start();
+            }, () => { });
+            subscriber.next(recorder);
 
             return {
                 unsubscribe() {
-                    if (recorder != null && recorder.state !== 'stopped') {
-                        recorder.stopRecording(() => {
-                            const blob = recorder.getBlob();
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                handler(reader.result as ArrayBuffer);
-                                recorder.destroy();
-                            };
-                            reader.readAsArrayBuffer(blob);
-                        });
-                    }
+                    recorder.stop(blob => {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            handler(reader.result as ArrayBuffer);
+                        };
+                        reader.readAsArrayBuffer(blob);
+                    });
                 }
             };
         });
