@@ -1,12 +1,15 @@
 import { NgZone, Injectable } from '@angular/core';
-import { RxBus } from '../rxbus';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import * as RecordRTC from 'recordrtc';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { AiuiComponent } from './aiui.component';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import * as RecordRTC from 'recordrtc';
+import { soundManager } from 'soundmanager2';
+
+import { RxBus } from '../rxbus';
+import { AiuiComponent } from './aiui.component';
+
 const global = window as any;
 const require = global.nodeRequire;
 
@@ -88,6 +91,17 @@ export class AIUI {
         });
     }
 
+    play(blob: Blob) {
+        soundManager
+            .createSound({
+                url: URL.createObjectURL(blob),
+                onload() {
+                    this.play();
+                }
+            })
+            .load();
+    }
+
     iat(data: any, type: string = 'audio'): Observable<string> {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
@@ -98,6 +112,7 @@ export class AIUI {
                     return result.intent.answer.text;
                 }
             }
+            return '这个没听清呢，请你说出要搜索内容哦。';
         }));
     }
 

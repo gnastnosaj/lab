@@ -6,7 +6,6 @@ import { filter, catchError } from 'rxjs/operators';
 
 import { Theme, theme, registerThemes } from './theme.core';
 import 'less';
-import { AIUI } from './aiui/aiui';
 import { RxBus } from './rxbus';
 import { HttpClient } from '@angular/common/http';
 import { Overlay } from '@angular/cdk/overlay';
@@ -166,14 +165,16 @@ export class AppComponent {
   constructor(public router: Router, private injector: Injector) {
     const global = window as any;
     if (global.nodeRequire) {
-      const aiui = Injector.create({
-        providers: [
-          { provide: AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
-        ],
-        parent: this.injector
-      }).get(AIUI);
+      import('./aiui/aiui').then(module => {
+        const aiui = Injector.create({
+          providers: [
+            { provide: module.AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
+          ],
+          parent: this.injector
+        }).get(module.AIUI);
 
-      aiui.attach();
+        aiui.attach();
+      });
     }
 
     const onresize = global.onresize;

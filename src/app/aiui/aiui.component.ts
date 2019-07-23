@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { soundManager } from 'soundmanager2';
 import { AIUI } from './aiui';
 
 @Component({
@@ -37,16 +36,7 @@ export class AiuiComponent implements OnInit {
       this.recording = true;
       this.recordSubscription = this.aiui.record(buffer => {
         this.aiui.iat(buffer).subscribe(answer => {
-          this.aiui.tts(answer).subscribe(blob => {
-            soundManager
-              .createSound({
-                url: URL.createObjectURL(blob),
-                onload() {
-                  this.play();
-                }
-              })
-              .load();
-          });
+          this.aiui.tts(answer).subscribe(blob => this.aiui.play(blob));
         });
       }).subscribe();
     }
@@ -60,5 +50,4 @@ export class AiuiComponent implements OnInit {
       this.recording = false;
     }
   }
-
 }
