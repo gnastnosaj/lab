@@ -35,7 +35,7 @@ export class Recorder {
 
     open(success?: () => void, error?: (errMsg: string) => void) {
         success = success || noop;
-        error = fail || noop;
+        error = error || noop;
 
         if (this.isOpen()) {
             success();
@@ -137,7 +137,7 @@ export class Recorder {
             });
         };
 
-        this.media.connect(process);
+        this.media.connect(this.process);
         this.process.connect(this.audioContext.destination);
         this.state = 1;
     }
