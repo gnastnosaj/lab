@@ -95,7 +95,7 @@ export class Recorder {
         this.state = 0;
         this.buffer = [];
         this.dataSize = 0;
-        if (!this.isOpen) {
+        if (!this.isOpen()) {
             return;
         }
 
