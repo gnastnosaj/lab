@@ -77,7 +77,10 @@ export class AIUI {
                         };
                         reader.readAsArrayBuffer(blob);
                         recorder.close();
-                    }, () => recorder.close());
+                    }, errMsg => {
+                        console.error(errMsg);
+                        recorder.close();
+                    });
                 }
             };
         });
