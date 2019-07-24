@@ -76,7 +76,8 @@ export class AIUI {
                             handler(reader.result as ArrayBuffer);
                         };
                         reader.readAsArrayBuffer(blob);
-                    });
+                        recorder.close();
+                    }, () => recorder.close());
                 }
             };
         });
