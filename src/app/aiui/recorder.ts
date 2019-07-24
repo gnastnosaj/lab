@@ -66,6 +66,7 @@ export class Recorder {
         this.audioContext = this.audioContext || new AudioContext();
         const successCallback = (stream: MediaStream) => {
             this.stream = stream;
+            success();
         };
         const errorCallback = (err: any) => {
             let errMsg = err.name || err.code || '';
