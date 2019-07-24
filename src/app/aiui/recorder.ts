@@ -220,12 +220,12 @@ export class Recorder {
                 data.setUint8(offset, str.charCodeAt(i));
             }
         };
-        const write16 = v => {
-            data.setUint16(offset, v, true);
+        const write16 = val => {
+            data.setUint16(offset, val, true);
             offset += 2;
         };
-        const write32 = (v) => {
-            data.setUint32(offset, v, true);
+        const write32 = val => {
+            data.setUint32(offset, val, true);
             offset += 4;
         };
 
