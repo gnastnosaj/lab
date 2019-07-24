@@ -4,7 +4,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import * as RecordRTC from 'recordrtc';
+import { Recorder } from './recorder';
 import { soundManager } from 'soundmanager2';
 
 import { RxBus } from '../rxbus';
@@ -58,22 +58,19 @@ export class AIUI {
             };
             reader.readAsArrayBuffer(blob);
         })) : new Observable(subscriber => {
-            let recorder: any;
-
-            const Recorder = global.Recorder;
-            recorder = new Recorder({
-                type: "wav",
+            const recorder = new Recorder({
+                type: 'wav',
                 bitRate: 16,
                 sampleRate: 16000
             });
             recorder.open(() => {
-                recorder.start();
-            }, () => { });
+                recorder.record();
+            }, errMsg => subscriber.error(errMsg));
             subscriber.next(recorder);
 
             return {
                 unsubscribe() {
-                    recorder.stop(blob => {
+                    recorder.save(blob => {
                         const reader = new FileReader();
                         reader.onload = () => {
                             handler(reader.result as ArrayBuffer);
