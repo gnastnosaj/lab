@@ -12,11 +12,12 @@ import { AiuiComponent } from './aiui.component';
 
 const global = window as any;
 const require = global.nodeRequire;
+const remote = require('electron').remote;
 
 @Injectable()
 export class AIUI {
     private APPID = '5d26f756';
-    private AUTH_ID = 'edc8e281d86f619df867537291bfe6f3';
+    private AUTH_ID = remote.require(`${remote.app.getAppPath()}/src/aiui`).AUTH_ID;
     private overlayRef: OverlayRef;
 
     constructor(private rxbus: RxBus, private ngZone: NgZone, private http: HttpClient, private overlay: Overlay) {
@@ -24,6 +25,10 @@ export class AIUI {
         ipcRenderer.on('aiui', (_, args) => {
             this.ngZone.run(() => this.rxbus.post(args.tag, args.payload));
         });
+
+        setTimeout(() => {
+            this.iat('搜索变形金刚', 'text').subscribe(data => console.log(data));
+        }, 3000);
     }
 
     attach() {
@@ -100,8 +105,9 @@ export class AIUI {
     iat(data: any, type: string = 'audio'): Observable<string> {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
-        const param = `{"scene": "main_box", "auth_id": "${this.AUTH_ID}", "data_type": "${type}"}`;
+        const param = `{"scene": "main", "auth_id": "${this.AUTH_ID}", "data_type": "${type}", "pers_param": "{\\\"auth_id\\\":\\\"${this.AUTH_ID}\\\"}"}`;
         return this.request(api, apiKey, data, param).pipe(map(output => {
+            console.log(output);
             for (const result of output.data) {
                 if (result.sub === 'nlp' && result.intent && result.intent.answer) {
                     return result.intent.answer.text;
@@ -126,19 +132,19 @@ export class AIUI {
     }
 
     private request(api: string, apiKey: string, data: any, param: string, options?: any): Observable<any> {
-        const crypto = require('electron').remote.require('crypto');
+        const crypto = remote.require('crypto');
 
         const xCurTime = `${Math.floor(Date.now() / 1000)}`;
         const xParam = btoa(param);
         const xCheckSum = crypto.createHash('md5').update(apiKey + xCurTime + xParam).digest('hex') as string;
 
+        const headers = {
+            'X-Param': xParam,
+            'X-CurTime': xCurTime,
+            'X-CheckSum': xCheckSum,
+            'X-Appid': this.APPID
+        };
         if (options != null) {
-            const headers = {
-                'X-Param': xParam,
-                'X-CurTime': xCurTime,
-                'X-CheckSum': xCheckSum,
-                'X-Appid': this.APPID
-            };
             if (options.headers != null) {
                 Object.assign(options.headers, headers);
             } else {
@@ -147,12 +153,7 @@ export class AIUI {
             return this.http.post(api, data, options);
         } else {
             return this.http.post(api, data, {
-                headers: {
-                    'X-Param': xParam,
-                    'X-CurTime': xCurTime,
-                    'X-CheckSum': xCheckSum,
-                    'X-Appid': this.APPID
-                }
+                headers
             });
         }
     }

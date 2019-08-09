@@ -1,30 +1,36 @@
-import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
-import Router from 'koa-router';
 import {
     BrowserWindow
 } from 'electron';
 
+import * as net from 'net';
+
+export const AUTH_ID = 'edc8e281d86f619df867537291bfe6f3';
+
 export class AIUI {
     initialize() {
-        const koa = new Koa();
-        koa.use(bodyParser());
-        const router = new Router();
-        router.get('/magneto', async ctx => {
-            const query = ctx.query;
-            const keyword = query.keyword;
-            BrowserWindow.getAllWindows()[0].webContents.send('aiui', {
-                tag: 'magneto',
+        const socket = net.connect({
+            host: 'www.jasontsang.dev',
+            port: 4400
+        }, () => {
+            socket.setEncoding('utf8');
+            socket.write(JSON.stringify({
+                tag: 'connection',
                 payload: {
-                    keyword
+                    device: {
+                        authId: AUTH_ID
+                    }
                 }
-            });
+            }));
         });
-        koa.use(router.middleware());
-        this.server = koa.listen(8000);
+
+        socket.on('data', data => {
+            data = JSON.parse(data.toString());
+            console.log(JSON.stringify(data));
+            BrowserWindow.getAllWindows()[0].webContents.send('aiui', data);
+        });
+
+        this.socket = socket;
     }
 
-    destroy() {
-        this.server.close();
-    }
+    destroy() {}
 }
