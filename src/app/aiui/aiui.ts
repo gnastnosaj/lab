@@ -121,7 +121,8 @@ export class AIUI {
     }
 
     tts(text: string): Observable<Blob> {
-        const api = 'http://api.xfyun.cn/v1/service/v1/tts';
+        // const api = 'http://api.xfyun.cn/v1/service/v1/tts';
+        const api = `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent('http://api.xfyun.cn/v1/service/v1/tts')}`
         const apiKey = '2c1b18e6aade7ed6e2637d7d8b266034';
         const param = `{"auf": "audio/L16;rate=16000", "aue": "raw", "voice_name": "xiaoyan"}`;
         return this.request(api, apiKey, `text=${encodeURIComponent(text)}`, param, {
