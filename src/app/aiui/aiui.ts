@@ -19,6 +19,7 @@ export class AIUI {
     private APPID = '5d26f756';
     private AUTH_ID = 'edc8e281d86f619df867537291bfe6f3';
     private overlayRef: OverlayRef;
+    private cache: { [propName: string]: Blob } = {};
 
     constructor(private rxbus: RxBus, private ngZone: NgZone, private http: HttpClient, private overlay: Overlay) {
         const { ipcRenderer } = require('electron');
@@ -121,8 +122,11 @@ export class AIUI {
     }
 
     tts(text: string): Observable<Blob> {
+        if (this.cache[text]) {
+            return of(this.cache[text]);
+        }
         // const api = 'http://api.xfyun.cn/v1/service/v1/tts';
-        const api = `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent('http://api.xfyun.cn/v1/service/v1/tts')}`
+        const api = `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent('http://api.xfyun.cn/v1/service/v1/tts')}`;
         const apiKey = '2c1b18e6aade7ed6e2637d7d8b266034';
         const param = `{"auf": "audio/L16;rate=16000", "aue": "raw", "voice_name": "xiaoyan"}`;
         return this.request(api, apiKey, `text=${encodeURIComponent(text)}`, param, {
@@ -130,9 +134,12 @@ export class AIUI {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             responseType: 'arraybuffer'
-        }).pipe(map(output => new Blob([output], {
-            type: 'audio/wav'
-        })));
+        }).pipe(
+            map(output => new Blob([output], {
+                type: 'audio/wav'
+            })),
+            tap(blob => this.cache[text] = blob)
+        );
     }
 
     private request(api: string, apiKey: string, data: any, param: string, options?: any): Observable<any> {
