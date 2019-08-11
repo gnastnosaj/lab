@@ -2,8 +2,8 @@ import { NgZone, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of, EmptyError } from 'rxjs';
+import { map, tap, flatMap } from 'rxjs/operators';
 import { Recorder } from './recorder';
 import { soundManager } from 'soundmanager2';
 
@@ -17,7 +17,7 @@ const remote = require('electron').remote;
 @Injectable()
 export class AIUI {
     private APPID = '5d26f756';
-    private AUTH_ID = remote.require(`${remote.app.getAppPath()}/src/aiui`).AUTH_ID;
+    private AUTH_ID = 'edc8e281d86f619df867537291bfe6f3';
     private overlayRef: OverlayRef;
 
     constructor(private rxbus: RxBus, private ngZone: NgZone, private http: HttpClient, private overlay: Overlay) {
@@ -25,10 +25,6 @@ export class AIUI {
         ipcRenderer.on('aiui', (_, args) => {
             this.ngZone.run(() => this.rxbus.post(args.tag, args.payload));
         });
-
-        setTimeout(() => {
-            this.iat('搜索变形金刚', 'text').subscribe(data => console.log(data));
-        }, 3000);
     }
 
     attach() {
@@ -105,16 +101,23 @@ export class AIUI {
     iat(data: any, type: string = 'audio'): Observable<string> {
         const api = 'http://openapi.xfyun.cn/v2/aiui';
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
-        const param = `{"scene": "main", "auth_id": "${this.AUTH_ID}", "data_type": "${type}", "pers_param": "{\\\"auth_id\\\":\\\"${this.AUTH_ID}\\\"}"}`;
-        return this.request(api, apiKey, data, param).pipe(map(output => {
-            console.log(output);
-            for (const result of output.data) {
-                if (result.sub === 'nlp' && result.intent && result.intent.answer) {
-                    return result.intent.answer.text;
-                }
-            }
-            return '这个没听清呢，请你说出要搜索内容哦。';
-        }));
+        const param = `{
+            "scene": "main",
+            "auth_id": "${this.AUTH_ID}",
+            "data_type": "${type}",
+            "pers_param": "{\\\"auth_id\\\":\\\"${this.AUTH_ID}\\\"}"
+        }`;
+        return this.request(api, apiKey, data, param)
+            .pipe(
+                flatMap(output => {
+                    for (const result of output.data) {
+                        if (result.sub === 'nlp' && result.intent && result.intent.answer) {
+                            return of(result.intent.answer.text);
+                        }
+                    }
+                    return EmptyError;
+                })
+            );
     }
 
     tts(text: string): Observable<Blob> {

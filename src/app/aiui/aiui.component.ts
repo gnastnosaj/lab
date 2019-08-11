@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { RxBus } from '../rxbus';
 import { AIUI } from './aiui';
 
 @Component({
@@ -28,6 +30,9 @@ export class AiuiComponent implements OnInit {
   recording = false;
   recordSubscription: Subscription;
 
+  constructor(private rxbus: RxBus) {
+  }
+
   ngOnInit() {
   }
 
@@ -35,9 +40,23 @@ export class AiuiComponent implements OnInit {
     if (!this.recording) {
       this.recording = true;
       this.recordSubscription = this.aiui.record(buffer => {
-        this.aiui.iat(buffer).subscribe(answer => {
-          this.aiui.tts(answer).subscribe(blob => this.aiui.play(blob));
-        });
+        this.aiui.iat(buffer)
+          .pipe(
+            map(output => JSON.parse(output)),
+            map(args => {
+              this.rxbus.post(args.tag, args.payload);
+              switch (args.tag) {
+                case 'magneto':
+                  return '正在搜索，请稍候。';
+                default:
+                  return '正在处理，请稍候。';
+              }
+            }),
+            catchError(() => of('这个没听清呢，请你说出要搜索内容哦。'))
+          )
+          .subscribe(answer => {
+            this.aiui.tts(answer).subscribe(blob => this.aiui.play(blob));
+          });
       }).subscribe();
     }
   }

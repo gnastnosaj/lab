@@ -4,16 +4,12 @@ import {
   Menu
 } from 'electron';
 
-import {
-  AIUI
-} from './aiui';
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
-require('electron-compile').addBypassChecker(( /*filePath*/ ) => true);
+require('electron-compile').addBypassChecker(( /*filePath*/) => true);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,8 +28,8 @@ const createWindow = () => {
 
   // mainWindow.webContents.openDevTools();
   // and load the index.html of the app.
-  //mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
-  mainWindow.loadURL('http://localhost:4200');
+  mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
+  //mainWindow.loadURL('http://localhost:4200');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -44,16 +40,12 @@ const createWindow = () => {
   });
 };
 
-const aiui = new AIUI();
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  //Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(null);
   createWindow();
-
-  aiui.initialize();
 });
 
 // Quit when all windows are closed.
@@ -61,7 +53,6 @@ app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    aiui.destroy();
     app.quit();
   }
 });
