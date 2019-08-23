@@ -321,22 +321,22 @@ export class AppComponent {
   }
 
   desktop() {
-    const github = window.location.href.includes('github');
+    const gitee = window.location.href.includes('gitee');
     switch (this.platform) {
       case 'Linux':
         window.open(
-          github ? 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_amd64.deb'
-            : 'https://gitee.com/jasontsang/lab/attach_files/268956/download'
+          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/268956/download'
+            : 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_amd64.deb'
         );
         break;
       case 'Windows':
         window.open(
-          github ? 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_x64.exe'
-            : 'https://gitee.com/jasontsang/lab/attach_files/268959/download'
+          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/268959/download'
+            : 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_x64.exe'
         );
         break;
       default:
-        window.open(github ? 'https://github.com/gnastnosaj/lab/releases/tag/1.0.0' : 'https://gitee.com/jasontsang/lab/releases');
+        window.open(gitee ? 'https://gitee.com/jasontsang/lab/releases' : 'https://github.com/gnastnosaj/lab/releases/tag/1.0.0');
         break;
     }
   }
