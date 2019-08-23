@@ -9,7 +9,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
-require('electron-compile').addBypassChecker(( /*filePath*/) => true);
+require('electron-compile').addBypassChecker(( /*filePath*/ ) => true);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,7 +20,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 768,
-    icon: `${__dirname}/app.ico`,
+    icon: process.platform === 'win32' ? `${__dirname}/app.ico` : `${__dirname}/../../dist/lab/assets/images/favicon.png`,
     webPreferences: {
       webSecurity: false
     }
