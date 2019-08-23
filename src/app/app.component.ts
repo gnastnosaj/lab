@@ -321,15 +321,22 @@ export class AppComponent {
   }
 
   desktop() {
+    const github = window.location.href.includes('github');
     switch (this.platform) {
       case 'Linux':
-        window.open('https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_amd64.deb');
+        window.open(
+          github ? 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_amd64.deb'
+            : 'https://gitee.com/jasontsang/lab/attach_files/268956/download'
+        );
         break;
       case 'Windows':
-        window.open('https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_x64.exe');
+        window.open(
+          github ? 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_x64.exe'
+            : 'https://gitee.com/jasontsang/lab/attach_files/268959/download'
+        );
         break;
       default:
-        window.open('https://github.com/gnastnosaj/lab/releases/tag/1.0.0');
+        window.open(github ? 'https://github.com/gnastnosaj/lab/releases/tag/1.0.0' : 'https://gitee.com/jasontsang/lab/releases');
         break;
     }
   }
