@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Magneto } from '../magneto';
 
 export abstract class Engine {
-    static providers = ['feiji', 'aiaicili'];
+    static providers = ['btdig', 'aiaicili', 'feiji'];
     constructor(protected http: HttpClient) { }
     abstract magneto(keyword: string, index?: number): Observable<Magneto>;
 }

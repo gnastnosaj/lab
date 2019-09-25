@@ -161,7 +161,7 @@ import { getOS } from 'simple-os-platform';
       z-index: 1;
       fill: #ed1d7f;
       color: #fff;
-      position: absolute;
+      position: fixed;
       top: 0;
       border: 0;
       left: 0;
