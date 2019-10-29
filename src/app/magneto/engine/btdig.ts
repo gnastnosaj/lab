@@ -37,10 +37,16 @@ export class EngineImpl extends Engine {
                         previous: `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index - 2}&order=0`,
                         next: `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index}&order=0`
                     };
+
+                    try {
+                        page.total = Math.ceil(parseInt($(document).find('form+div span').text().trim().split(' ')[0]) / 10);
+                    } catch { }
+
                     const magneto: Magneto = {
                         data,
                         page
                     };
+
                     return magneto;
                 })
             );
