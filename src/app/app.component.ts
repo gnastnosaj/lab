@@ -229,20 +229,20 @@ export class AppComponent {
     const global = window as any;
     if (global.nodeRequire) {
       this.platform = 'electron';
-
-      import('./aiui/aiui').then(module => {
-        const aiui = Injector.create({
-          providers: [
-            { provide: module.AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
-          ],
-          parent: this.injector
-        }).get(module.AIUI);
-
-        aiui.attach();
-      });
     } else {
       this.platform = getOS();
     }
+    
+    import('./aiui/aiui').then(module => {
+      const aiui = Injector.create({
+        providers: [
+          { provide: module.AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
+        ],
+        parent: this.injector
+      }).get(module.AIUI);
+
+      aiui.attach();
+    });
 
     const onresize = global.onresize;
     global.onresize = ev => {

@@ -6,13 +6,13 @@ import { Observable, of, EmptyError } from 'rxjs';
 import { map, tap, flatMap } from 'rxjs/operators';
 import { Recorder } from './recorder';
 import { soundManager } from 'soundmanager2';
+import CryptoJS from 'crypto-js';
 
 import { RxBus } from '../rxbus';
 import { AiuiComponent } from './aiui.component';
 
 const global = window as any;
 const require = global.nodeRequire;
-const remote = require('electron').remote;
 
 @Injectable()
 export class AIUI {
@@ -22,10 +22,12 @@ export class AIUI {
     private cache: { [propName: string]: Blob } = {};
 
     constructor(private rxbus: RxBus, private ngZone: NgZone, private http: HttpClient, private overlay: Overlay) {
-        const { ipcRenderer } = require('electron');
-        ipcRenderer.on('aiui', (_, args) => {
-            this.ngZone.run(() => this.rxbus.post(args.tag, args.payload));
-        });
+        if (require) {
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.on('aiui', (_, args) => {
+                this.ngZone.run(() => this.rxbus.post(args.tag, args.payload));
+            });
+        }
     }
 
     attach() {
@@ -100,7 +102,7 @@ export class AIUI {
     }
 
     iat(data: any, type: string = 'audio'): Observable<string> {
-        const api = 'http://openapi.xfyun.cn/v2/aiui';
+        const api = `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent('http://openapi.xfyun.cn/v2/aiui')}`;
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
         const param = `{
             "scene": "main",
@@ -116,7 +118,7 @@ export class AIUI {
                             return of(result.intent.answer.text);
                         }
                     }
-                    return EmptyError;
+                    throw EmptyError;
                 })
             );
     }
@@ -125,7 +127,6 @@ export class AIUI {
         if (this.cache[text]) {
             return of(this.cache[text]);
         }
-        // const api = 'http://api.xfyun.cn/v1/service/v1/tts';
         const api = `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent('http://api.xfyun.cn/v1/service/v1/tts')}`;
         const apiKey = '2c1b18e6aade7ed6e2637d7d8b266034';
         const param = `{"auf": "audio/L16;rate=16000", "aue": "raw", "voice_name": "xiaoyan"}`;
@@ -143,11 +144,9 @@ export class AIUI {
     }
 
     private request(api: string, apiKey: string, data: any, param: string, options?: any): Observable<any> {
-        const crypto = remote.require('crypto');
-
         const xCurTime = `${Math.floor(Date.now() / 1000)}`;
         const xParam = btoa(param);
-        const xCheckSum = crypto.createHash('md5').update(apiKey + xCurTime + xParam).digest('hex') as string;
+        const xCheckSum = CryptoJS.MD5(apiKey + xCurTime + xParam).toString();
 
         const headers = {
             'X-Param': xParam,
