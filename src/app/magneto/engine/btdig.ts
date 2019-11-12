@@ -9,7 +9,7 @@ export class EngineImpl extends Engine {
     magneto(keyword: string, index?: number): Observable<Magneto> {
         return this.http.get(`https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(
             `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index - 1}&order=0`
-        )}`, { responseType: 'text' })
+        )}&force=true`, { responseType: 'text' })
             .pipe(
                 map(html => $.parseHTML(html)),
                 map(document => {
