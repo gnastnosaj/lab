@@ -325,13 +325,13 @@ export class AppComponent {
     switch (this.platform) {
       case 'Linux':
         window.open(
-          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/268956/download'
+          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/296511/download'
             : 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_amd64.deb'
         );
         break;
       case 'Windows':
         window.open(
-          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/268959/download'
+          gitee ? 'https://gitee.com/jasontsang/lab/attach_files/296545/download'
             : 'https://github.com/gnastnosaj/lab/releases/download/1.0.0/lab_1.0.0_x64.exe'
         );
         break;
