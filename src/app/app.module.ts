@@ -38,7 +38,7 @@ registerLocaleData(zh);
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    ...(environment.electron ? [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }] : [])
+    { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
   entryComponents: [AiuiComponent]

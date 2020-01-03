@@ -11,7 +11,6 @@ import { MagnetoRoutingModule } from './magneto-routing.module';
 import { MagnetoComponent } from './magneto.component';
 
 import { CorsInterceptor } from '../shared/cors-interceptor';
-import { environment } from 'src/environments/environment';
 
 @NgModule({
     declarations: [
@@ -21,7 +20,7 @@ import { environment } from 'src/environments/environment';
 
     providers: [
         ApiService,
-        ...(environment.electron ? [{ provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }] : [])
+        { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
     ]
 })
 export class MagnetoModule { }

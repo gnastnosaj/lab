@@ -14,7 +14,9 @@ import { AiuiComponent } from './aiui.component';
 const global = window as any;
 const require = global.nodeRequire;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AIUI {
     private APPID = '5d26f756';
     private AUTH_ID = 'edc8e281d86f619df867537291bfe6f3';

@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/src/assets/styles/*
+!/src/assets/styles/.gitkeep
 # Only exists if Bazel was run
 /bazel-out
 

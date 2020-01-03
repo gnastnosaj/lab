@@ -1,15 +1,13 @@
-import {
+const {
   app,
   BrowserWindow,
   Menu
-} from 'electron';
+} = require('electron');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
-
-require('electron-compile').addBypassChecker(( /*filePath*/ ) => true);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,6 +20,7 @@ const createWindow = () => {
     height: 768,
     icon: process.platform === 'win32' ? `${__dirname}/app.ico` : `${__dirname}/../../dist/lab/assets/images/favicon.png`,
     webPreferences: {
+      nodeIntegration: true,
       webSecurity: false
     }
   });
@@ -29,7 +28,7 @@ const createWindow = () => {
   // mainWindow.webContents.openDevTools();
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/../../dist/lab/index.html`);
-  //mainWindow.loadURL('http://localhost:4200');
+  // mainWindow.loadURL('http://localhost:4200');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

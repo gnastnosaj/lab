@@ -1,8 +1,9 @@
 {
   "name": "lab",
   "productName": "Jason Tsang's Lab",
-  "version": "1.0.0",
   "description": "Jason Tsang's Lab",
+  "version": "1.0.0",
+  "author": "Jason Tsang",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -11,23 +12,9 @@
     "publish": "electron-forge publish",
     "lint": "eslint src --color"
   },
-  "keywords": [],
-  "author": "Jason Tsang",
   "config": {
     "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
+      "packagerConfig": {
         "packageManager": "npm",
         "name": "lab",
         "icon": "src/app.ico",
@@ -40,34 +27,52 @@
           "ProductName": "Jason Tsang's Lab"
         }
       },
-      "electronWinstallerConfig": {
-        "name": "lab",
-        "setupIcon": "src/app.ico",
-        "setupExe": "lab_1.0.0_x64.exe",
-        "loadingGif": "src/loading.gif"
-      },
-      "electronInstallerDebian": {
-        "icon": "src/app.ico"
-      },
-      "electronInstallerRedhat": {
-        "icon": "src/app.ico"
-      }
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "maintainer": "Jason Tsang <jasontsagn.dev@gmail.com> (https://jasontsang.dev)",
+            "icon": "src/app.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "lab",
+            "setupIcon": "src/app.ico",
+            "setupExe": "lab_1.0.0.exe",
+            "loadingGif": "src/loading.gif"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        }
+      ]
     }
   },
   "dependencies": {
-    "electron-compile": "^6.4.4",
-    "electron-squirrel-startup": "^1.0.0"
+    "axios": "^0.19.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^5.1.0",
+    "fs-extra": "^8.1.0",
+    "is-elevated": "^3.0.0",
+    "log4js": "^6.1.0",
+    "mkdirp": "^0.5.1",
+    "multi-write-stream": "^2.0.1",
+    "require-from-memory": "^1.0.2",
+    "rimraf": "^3.0.0",
+    "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "electron-forge": "^5.2.4",
-    "electron-prebuilt-compile": "4.0.0",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.12.4"
+    "@electron-forge/cli": "6.0.0-beta.47",
+    "@electron-forge/maker-deb": "6.0.0-beta.47",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.47",
+    "@electron-forge/maker-zip": "6.0.0-beta.47",
+    "electron": "7.1.7",
+    "electron-installer-debian": "2.0.1",
+    "electron-winstaller": "4.0.0"
   }
 }

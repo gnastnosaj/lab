@@ -1,14 +1,11 @@
-import { Component, Injector, NgZone } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Router, RouterEvent, NavigationStart } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
-import { filter, catchError } from 'rxjs/operators';
+import { Observable, Subscription, Subscriber } from 'rxjs';
+import { filter, catchError, throttleTime } from 'rxjs/operators';
 
 import { Theme, theme, registerThemes } from './theme.core';
-import 'less';
-import { RxBus } from './rxbus';
 import { HttpClient } from '@angular/common/http';
-import { Overlay } from '@angular/cdk/overlay';
 import { getOS } from 'simple-os-platform';
 
 @Component({
@@ -225,23 +222,38 @@ export class AppComponent {
 
   recording: Subscription;
 
-  constructor(public router: Router, private injector: Injector) {
+  constructor(public router: Router, private injector: Injector, private http: HttpClient) {
     const global = window as any;
     if (global.nodeRequire) {
       this.platform = 'electron';
     } else {
       this.platform = getOS();
     }
-    
+
     import('./aiui/aiui').then(module => {
-      const aiui = Injector.create({
-        providers: [
-          { provide: module.AIUI, deps: [RxBus, NgZone, HttpClient, Overlay] }
-        ],
-        parent: this.injector
-      }).get(module.AIUI);
+      const aiui = this.injector.get(module.AIUI);;
 
       aiui.attach();
+
+      let previousScrollTop = $(document).scrollTop();
+
+      new Observable(subscriber => {
+        window.addEventListener('scroll', event => {
+          subscriber.next(event);
+        });
+      })
+        .pipe(
+          throttleTime(200)
+        )
+        .subscribe(() => {
+          const currentScrollTop = $(document).scrollTop();
+          if (currentScrollTop > previousScrollTop) {
+            aiui.dettach();
+          } else {
+            aiui.attach();
+          }
+          previousScrollTop = currentScrollTop;
+        });
     });
 
     const onresize = global.onresize;
@@ -279,17 +291,21 @@ export class AppComponent {
       if (this.styles[t]) {
         this.style.innerHTML = this.styles[t];
       } else {
-        let render = new Observable<string>(observer => {
-          less.render(`@import "theme/${t}.less";`, {
-            javascriptEnabled: true
-          }).then(output => {
-            observer.next(output.css);
-          });
+        let remedy = new Observable<string>(observer => {
+          import('less')
+            .then(less => {
+              less.render(`@import "theme/${t}.less";`, {
+                javascriptEnabled: true
+              }).then(output => {
+                observer.next(output.css);
+              }).catch(error => observer.error(error));
+            })
+            .catch(error => observer.error(error));
           return { unsubscribe() { } };
         });
         if (typeof Worker !== 'undefined') {
-          const temp = render;
-          render = new Observable<string>(observer => {
+          const temp = remedy;
+          remedy = new Observable<string>(observer => {
             const worker = new Worker('./theme.worker', { type: 'module' });
             worker.onmessage = ({ data }) => {
               observer.next(data.css);
@@ -307,6 +323,15 @@ export class AppComponent {
           }).pipe(
             catchError(() => temp)
           );
+        }
+        let render = this.http.get(`assets/styles/${t}.css`, {
+          responseType: 'text'
+        }).pipe(
+          catchError(() => remedy)
+        );
+        const global = window as any;
+        if (global.nodeRequire) {
+          render = remedy
         }
         subscription = render.subscribe(css => {
           this.style.innerHTML = css;
