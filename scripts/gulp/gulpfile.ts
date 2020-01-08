@@ -53,6 +53,19 @@ task('build-engine', series(
     'webpack-engine'
 ));
 
+task('copy-engine', done => {
+    const engines = fs.readdirSync('./out-tsc/magneto/dist/engine');
+    engines.forEach(engine => {
+        fs.createReadStream(`./out-tsc/magneto/dist/engine/${engine}`).pipe(fs.createWriteStream(`./dist/lab/magneto/engine/${engine}`));
+    });
+    done();
+});
+
+task('update-engine', series(
+    'build-engine',
+    'copy-engine'
+));
+
 task('serve-project', execNodeTask(
     '@angular/cli',
     'ng',
