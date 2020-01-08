@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { Router, RouterEvent, NavigationStart } from '@angular/router';
 
-import { Observable, Subscription, Subscriber } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter, catchError, throttleTime } from 'rxjs/operators';
 
 import { Theme, theme, registerThemes } from './theme.core';

@@ -1,33 +1,44 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { flatMap, catchError, timeout } from 'rxjs/operators';
 
-import { Engine } from './engine/engine';
 import { Magneto } from './magneto';
+
+const SystemJS = (window as any).System;
 
 @Injectable()
 export class ApiService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+    }
 
     magneto(keyword: string, index?: number): Observable<Magneto> {
-        return of([...Engine.providers]).pipe(
-            flatMap(providers => {
+        return new Observable<any>(subscriber => {
+            SystemJS
+                .import('./magneto/engine/engine.js')
+                .then(module => {
+                    subscriber.next(module.Engine);
+                    subscriber.complete();
+                })
+                .catch(error => subscriber.error(error));
+        }).pipe(
+            flatMap(Engine => {
+                const providers = [...Engine.providers];
+
                 const createEngine = () => {
-                    return new Observable<Engine>(observer => {
+                    return new Observable<any>(subscriber => {
                         const provider = providers.shift();
                         if (provider == null) {
-                            observer.complete();
+                            subscriber.complete();
                         } else {
-                            import(`./engine/${provider}`)
+                            SystemJS
+                                .import(`./magneto/engine/${provider}.js`)
                                 .then(module => {
-                                    observer.next(new module.EngineImpl(this.http));
-                                    observer.complete();
+                                    subscriber.next(new module.EngineImpl(this.http));
+                                    subscriber.complete();
                                 })
-                                .catch(e => {
-                                    observer.error(e);
-                                });
+                                .catch(error => subscriber.error(error));
                         }
                         return { unsubscribe() { } };
                     });
@@ -35,9 +46,12 @@ export class ApiService {
 
                 let createTask: () => Observable<Magneto>;
                 createTask = () => createEngine().pipe(
-                    flatMap(engine => engine.magneto(keyword, index)),
+                    flatMap(engine => engine.magneto(keyword, index) as Observable<Magneto>),
                     timeout(5000),
-                    catchError(() => createTask())
+                    catchError(error => {
+                        console.log(error);
+                        return createTask();
+                    })
                 );
                 return createTask();
             })

@@ -39,6 +39,7 @@
     "screenfull": "^4.2.0",
     "simple-os-platform": "^1.1.0",
     "soundmanager2": "^2.97.20170602",
+    "systemjs": "^6.1.7",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
@@ -68,8 +69,10 @@
     "protractor": "~5.4.0",
     "push-dir": "^0.4.1",
     "resolve-bin": "^0.4.0",
+    "systemjs-webpack-interop": "^1.1.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.4.5"
+    "typescript": "~3.4.5",
+    "webpack-cli": "^3.3.10"
   }
 }

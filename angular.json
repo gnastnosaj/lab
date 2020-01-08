@@ -39,6 +39,11 @@
                 "input": "./src/theme/",
                 "output": "/theme/"
               },
+              {
+                "glob": "**/*.js",
+                "input": "./out-tsc/magneto/dist/",
+                "output": "/magneto/"
+              },
               "src/manifest.json"
             ],
             "styles": [
@@ -46,6 +51,7 @@
               "./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css"
             ],
             "scripts": [
+              "./node_modules/systemjs/dist/system.js",
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js"
             ],
@@ -136,6 +142,11 @@
                 "glob": "**/*.less",
                 "input": "./src/theme/",
                 "output": "/theme/"
+              },
+              {
+                "glob": "**/*.js",
+                "input": "./out-tsc/magneto/dist/",
+                "output": "/magneto/"
               },
               "src/manifest.json"
             ]

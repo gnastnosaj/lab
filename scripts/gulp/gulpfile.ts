@@ -34,6 +34,25 @@ task('build-theme', done => {
     Promise.all(promises).then(() => done(), error => done(error));
 });
 
+task('build-magneto', execNodeTask(
+    'typescript',
+    'tsc',
+    ['--build', 'src/tsconfig.magneto.json']
+));
+
+task('webpack-engine', execNodeTask(
+    'webpack',
+    'webpack',
+    [],
+    {},
+    `${__dirname}/../../out-tsc/magneto`
+));
+
+task('build-engine', series(
+    'build-magneto',
+    'webpack-engine'
+));
+
 task('serve-project', execNodeTask(
     '@angular/cli',
     'ng',
@@ -55,17 +74,20 @@ task('make-project', execNodeTask(
 task('serve', series(
     'copy-resource',
     'build-theme',
+    'build-engine',
     'serve-project'
 ));
 
 task('build', series(
     'copy-resource',
     'build-theme',
+    'build-engine',
     'build-project'
 ));
 
 task('make', series(
     'copy-resource',
     'build-theme',
+    'build-engine',
     'make-project'
 ));
