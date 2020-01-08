@@ -3,7 +3,10 @@
 # compiled output
 /dist
 /tmp
-/out-tsc
+/out-tsc/*
+!/out-tsc/magneto
+/out-tsc/magneto/*
+!/out-tsc/magneto/webpack.config.js
 /src/assets/styles/*
 !/src/assets/styles/.gitkeep
 # Only exists if Bazel was run
