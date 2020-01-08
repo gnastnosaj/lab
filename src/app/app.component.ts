@@ -230,7 +230,7 @@ export class AppComponent {
       this.platform = getOS();
     }
 
-    import('./aiui/aiui').then(module => {
+    import(/* webpackChunkName: "aiui" */ './aiui/aiui').then(module => {
       const aiui = this.injector.get(module.AIUI);;
 
       aiui.attach();
