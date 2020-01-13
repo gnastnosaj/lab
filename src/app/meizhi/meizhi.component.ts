@@ -6,6 +6,9 @@ import { Meizhi } from './meizhi';
 import { ApiService } from './api.service';
 import * as Masonry from 'masonry-layout';
 import * as imagesLoaded from 'imagesloaded';
+import { RxBus } from '../rxbus';
+import { Observable, Subscription, of } from 'rxjs';
+import { throttleTime, tap, delay, repeat, flatMap } from 'rxjs/operators';
 
 BScroll.use(PullDown);
 BScroll.use(Pullup);
@@ -29,8 +32,10 @@ export class MeizhiComponent implements OnInit, OnDestroy {
   scroll: BScroll;
   masonry: Masonry;
   mutationObserver: MutationObserver;
+  scrollObserver: Observable<BScroll>;
+  subscription = new Subscription();
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private rxbus: RxBus) {
   }
 
   ngOnInit() {
@@ -50,6 +55,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
           this.loading = false;
         });
       }
+      this.rxbus.post('scroll', this.scroll);
     }).on('pullingDown', () => {
       this.refreshing = true;
       this.api.refresh().subscribe(data => {
@@ -67,6 +73,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
         });
       }
     });
+
     this.masonry = new Masonry(this.waterfall.nativeElement, {
       itemSelector: '.item',
       hiddenStyle: {
@@ -79,7 +86,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.mutationObserver = new MutationObserver((mutations) => {
+    this.mutationObserver = new MutationObserver(mutations => {
       if (mutations.some(mutation => mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
         mutations.forEach(mutation => {
           mutation.addedNodes.forEach((node: HTMLElement) => {
@@ -100,6 +107,32 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     this.mutationObserver.observe(this.waterfall.nativeElement, {
       childList: true
     });
+
+    this.scrollObserver = this.rxbus.register('scroll');
+    this.subscription.add(
+      this.scrollObserver
+        .pipe(
+          throttleTime(1000),
+          flatMap(data => {
+            return of(data)
+              .pipe(
+                tap(() => {
+                  $('div.waterfall div.item').each((_, item) => {
+                    const element = this.scrollable.nativeElement;
+                    if (item.offsetTop + item.offsetHeight + this.scroll.y + window.screen.height < element.offsetTop || item.offsetTop + this.scroll.y - window.screen.height > element.offsetTop + element.offsetHeight) {
+                      item.style.visibility = 'hidden';
+                    } else {
+                      item.style.visibility = 'visible';
+                    }
+                  });
+                }),
+                delay(500),
+                repeat(3)
+              );
+          })
+        )
+        .subscribe()
+    );
 
     this.refreshing = true;
     this.api.refresh().subscribe(data => {
@@ -136,5 +169,9 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     if (this.mutationObserver != null) {
       this.mutationObserver.disconnect();
     }
+    if (this.scrollObserver != null) {
+      this.rxbus.unregister('scroll', this.scrollObserver);
+    }
+    this.subscription.unsubscribe();
   }
 }
