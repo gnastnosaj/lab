@@ -89,13 +89,24 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     this.mutationObserver = new MutationObserver(mutations => {
       if (mutations.some(mutation => mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
         mutations.forEach(mutation => {
+          const states = [];
           mutation.addedNodes.forEach((node: HTMLElement) => {
             node.style.display = 'none';
-            imagesLoaded(node).on('progress', () => {
-              node.style.display = 'block';
-              this.masonry.appended(node);
-              this.masonry.layout();
-              this.scroll.refresh();
+            imagesLoaded(node).on('progress', (_, image) => {
+              states.push({
+                node,
+                image
+              });
+              if (states.length === mutation.addedNodes.length) {
+                states.forEach(state => {
+                  if (state.image.isLoaded) {
+                    state.node.style.display = 'block';
+                    this.masonry.appended(node);
+                  }
+                });
+                this.masonry.layout();
+                this.scroll.refresh();
+              }
             });
           });
           mutation.removedNodes.forEach(node => {
