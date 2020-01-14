@@ -160,7 +160,24 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     );
 
     this.resizeObserver = this.rxbus.register('resize');
-    this.subscription.add(this.resizeObserver.subscribe(() => this.layout = true));
+    this.subscription.add(
+      this.resizeObserver
+        .pipe(
+          throttleTime(1000),
+          flatMap(data => {
+            return of(data)
+              .pipe(
+                tap(() => {
+                  this.masonry.layout();
+                  this.scroll.refresh();
+                }),
+                delay(500),
+                repeat(2)
+              );
+          })
+        )
+        .subscribe()
+    );
 
     this.refreshing = true;
     this.api.refresh().subscribe(data => {
