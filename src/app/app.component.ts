@@ -7,6 +7,7 @@ import { filter, catchError, throttleTime } from 'rxjs/operators';
 import { Theme, theme, registerThemes } from './theme.core';
 import { HttpClient } from '@angular/common/http';
 import { getOS } from 'simple-os-platform';
+import { RxBus } from './rxbus';
 
 @Component({
   selector: 'app-root',
@@ -222,7 +223,7 @@ export class AppComponent {
 
   recording: Subscription;
 
-  constructor(public router: Router, private injector: Injector, private http: HttpClient) {
+  constructor(public router: Router, private injector: Injector, private http: HttpClient, private rxbus: RxBus) {
     const global = window as any;
     if (global.nodeRequire) {
       this.platform = 'electron';
@@ -257,11 +258,12 @@ export class AppComponent {
     });
 
     const onresize = global.onresize;
-    global.onresize = ev => {
+    global.onresize = event => {
       if (onresize instanceof Function) {
-        onresize.call(onresize, ev);
+        onresize.call(onresize, event);
       }
       this.transform = `scaleX(${document.body.clientWidth / 60})`;
+      this.rxbus.post('resize', event);
     };
 
     (this.router.events.pipe(

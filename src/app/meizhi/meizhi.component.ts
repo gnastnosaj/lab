@@ -22,6 +22,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
   data: Meizhi[] = [];
   refreshing = false;
   loading = false;
+  layout = false;
 
   @ViewChild('scrollable', { static: true })
   scrollable: ElementRef<HTMLDivElement>;
@@ -33,6 +34,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
   masonry: Masonry;
   mutationObserver: MutationObserver;
   scrollObserver: Observable<BScroll>;
+  resizeObserver: Observable<any>;
   subscription = new Subscription();
 
   constructor(private api: ApiService, private rxbus: RxBus) {
@@ -62,6 +64,7 @@ export class MeizhiComponent implements OnInit, OnDestroy {
         this.data = data;
         this.refreshing = false;
         this.scroll.finishPullDown();
+        this.layout = true;
       });
     }).on('pullingUp', () => {
       if (this.api.hasMore()) {
@@ -100,11 +103,14 @@ export class MeizhiComponent implements OnInit, OnDestroy {
               if (states.length === mutation.addedNodes.length) {
                 states.forEach(state => {
                   if (state.image.isLoaded) {
-                    state.node.style.display = 'block';
-                    this.masonry.appended(node);
+                    state.node.style.display = '';
                   }
                 });
-                this.masonry.layout();
+                this.masonry.appended(states.filter(state => state.image.isLoaded).map(state => state.node));
+                if (this.layout) {
+                  this.masonry.layout();
+                  this.layout = false;
+                }
                 this.scroll.refresh();
               }
             });
@@ -153,10 +159,14 @@ export class MeizhiComponent implements OnInit, OnDestroy {
         .subscribe()
     );
 
+    this.resizeObserver = this.rxbus.register('resize');
+    this.subscription.add(this.resizeObserver.subscribe(() => this.layout = true));
+
     this.refreshing = true;
     this.api.refresh().subscribe(data => {
       this.data = data;
       this.refreshing = false;
+      this.layout = true;
     });
   }
 
@@ -190,6 +200,9 @@ export class MeizhiComponent implements OnInit, OnDestroy {
     }
     if (this.scrollObserver != null) {
       this.rxbus.unregister('scroll', this.scrollObserver);
+    }
+    if (this.resizeObserver != null) {
+      this.rxbus.unregister('resize', this.resizeObserver);
     }
     this.subscription.unsubscribe();
   }
