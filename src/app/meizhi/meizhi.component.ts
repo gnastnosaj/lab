@@ -131,9 +131,17 @@ export class MeizhiComponent implements OnInit, OnDestroy {
                   $('div.waterfall div.item').each((_, item) => {
                     const element = this.scrollable.nativeElement;
                     if (item.offsetTop + item.offsetHeight + this.scroll.y + window.screen.height < element.offsetTop || item.offsetTop + this.scroll.y - window.screen.height > element.offsetTop + element.offsetHeight) {
-                      item.style.visibility = 'hidden';
+                      if (item.style.display === '' || item.style.display === 'block') {
+                        item.style.width = `${item.offsetWidth}px`;
+                        item.style.height = `${item.offsetHeight}px`;
+                        (item.children[0] as HTMLElement).style.display = 'none';
+                      }
                     } else {
-                      item.style.visibility = 'visible';
+                      if (item.style.display === '' || item.style.display === 'block') {
+                        item.style.width = '';
+                        item.style.height = '';
+                        (item.children[0] as HTMLElement).style.display = '';
+                      }
                     }
                   });
                 }),
