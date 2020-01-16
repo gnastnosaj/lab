@@ -15,15 +15,17 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { AiuiComponent } from './aiui/aiui.component';
 import { CorsInterceptor } from './shared/cors-interceptor';
+import { AiuiComponent } from './aiui/aiui.component';
+import { BlocklyComponent } from './blockly/blockly.component';
 
 registerLocaleData(zh);
 
 @NgModule({
   declarations: [
     AppComponent,
-    AiuiComponent
+    AiuiComponent,
+    BlocklyComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,6 @@ registerLocaleData(zh);
     { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AiuiComponent]
+  entryComponents: [AiuiComponent, BlocklyComponent]
 })
 export class AppModule { }

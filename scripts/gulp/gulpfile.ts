@@ -17,7 +17,7 @@ task('copy-resource', done => {
 
 task('build-theme', done => {
     const styles = fs.readdirSync('./src/assets/styles');
-    const promises = styles.filter(style => style.endsWith('.less')).map(style => new Promise((resolve, reject) => {
+    const promises = styles.filter(style => style.endsWith('.less') && style !== 'theme.less').map(style => new Promise((resolve, reject) => {
         execNodeTask(
             'less',
             'lessc',
@@ -31,7 +31,13 @@ task('build-theme', done => {
             }
         });
     }));
-    Promise.all(promises).then(() => done(), error => done(error));
+    Promise.all(promises).then(() => {
+        fs.unlinkSync('./src/assets/styles/theme.less');
+        done();
+    }, error => {
+        fs.unlinkSync('./src/assets/styles/theme.less');
+        done(error);
+    });
 });
 
 task('build-magneto', execNodeTask(

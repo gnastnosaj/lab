@@ -27,6 +27,8 @@
     "@better-scroll/pull-down": "^2.0.0-alpha.15",
     "@better-scroll/pull-up": "^2.0.0-alpha.15",
     "@fancyapps/fancybox": "^3.5.7",
+    "blockly": "^3.20191014.4",
+    "code-prettify": "^0.1.0",
     "core-js": "^2.5.4",
     "crypto-js": "^3.1.9-1",
     "imagesloaded": "^4.1.4",

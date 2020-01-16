@@ -32,9 +32,9 @@ import { RxBus } from './rxbus';
       </div>
       <header appTheme>
         <div class="left"></div>
+        <img src="assets/images/favicon.png" (click)="rxbus.send('blockly')">
         <nz-dropdown [nzTrigger]="'click'">
           <span nz-dropdown class="title">
-            <img src="assets/images/favicon.png" />
             Jason Tsang's Lab
             <i nz-icon nzType="down" nzTheme="outline"></i>
           </span>
@@ -109,6 +109,12 @@ import { RxBus } from './rxbus';
       align-items: center;
     }
 
+    header img {
+      width: 24px;
+      height: 24px;
+      margin-top: -8px;
+    }
+
     header .title {
       color: #ed1d7f;
       font-size: 16px;
@@ -118,12 +124,6 @@ import { RxBus } from './rxbus';
 
     header.mojave .title {
       color: #dcbc7f;
-    }
-
-    header .title img {
-      width: 24px;
-      height: 24px;
-      margin-top: -8px;
     }
 
     header .title i {
@@ -255,6 +255,16 @@ export class AppComponent {
           }
           previousScrollTop = currentScrollTop;
         });
+    });
+
+    import(/* webpackChunkName: "blockly" */ './blockly/blockly').then(module => {
+      const blockly = this.injector.get(module.Blockly);;
+
+      this.rxbus.toObserverable().subscribe(event => {
+        if (event === 'blockly') {
+          blockly.attach();
+        }
+      });
     });
 
     const onresize = global.onresize;
