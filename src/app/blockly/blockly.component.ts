@@ -348,8 +348,12 @@ export class BlocklyComponent implements OnInit {
       const pre = this.code.nativeElement as HTMLPreElement;
       pre.innerHTML = JavaScript.workspaceToCode(this.workspace);
       pre.classList.remove('prettyprinted');
-      (window as any).PR.prettyPrint()
+      (window as any).PR.prettyPrint();
     });
+  }
+
+  play() {
+    eval(JavaScript.workspaceToCode(this.workspace));
   }
 
   close() {
