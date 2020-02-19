@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Blockly } from './blockly';
-import { inject, Workspace } from 'blockly';
+import { inject, Workspace, Blocks } from 'blockly';
 import * as JavaScript from 'blockly/javascript';
 
 @Component({
@@ -224,6 +224,13 @@ export class BlocklyComponent implements OnInit {
             </shadow>
           </value>
         </block>
+        <block type="text_log">
+          <value name="TEXT">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
         <block type="text_prompt_ext">
           <value name="TEXT">
             <shadow type="text">
@@ -332,6 +339,23 @@ export class BlocklyComponent implements OnInit {
     if (!(window as any).PR) {
       import('code-prettify/src/prettify').then();
     }
+    Blocks["text_log"] = {
+      init: function () {
+        this.jsonInit({
+          "message0": 'log %1',
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "TEXT",
+              "check": "String"
+            }
+          ],
+          "previousStatement": null,
+          "colour": 160
+        });
+      }
+    };
+    JavaScript["text_log"] = block => `console.log(${JavaScript.valueToCode(block, 'TEXT', JavaScript.ORDER_NONE) || ''})\n`;
     this.workspace = inject(
       this.blockly.nativeElement,
       {
