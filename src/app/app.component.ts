@@ -33,26 +33,26 @@ import { RxBus } from './rxbus';
       <header appTheme>
         <div class="left"></div>
         <img src="assets/images/favicon.png" (click)="rxbus.send('blockly')">
-        <nz-dropdown [nzTrigger]="'click'">
-          <span nz-dropdown class="title">
-            Jason Tsang's Lab
-            <i nz-icon nzType="down" nzTheme="outline"></i>
-          </span>
+        <span nz-dropdown [nzTrigger]="'click'" [nzDropdownMenu]="menu" class="title">
+          Jason Tsang's Lab
+          <i nz-icon nzType="down" nzTheme="outline"></i>
+        </span>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu nzSelectable>
             <li nz-menu-item  *ngFor="let menu of menus" (click)="this.router.navigateByUrl(menu.path);">
               <a>{{menu.title}}</a>
             </li>
           </ul>
-        </nz-dropdown>
+        </nz-dropdown-menu>
         <div class="right">
-          <nz-dropdown>
-            <button class="theme" nz-button [nzSize]="'small'" nz-dropdown><span>{{currentTheme}}</span><i nz-icon type="down"></i></button>
+          <button class="theme" nz-button [nzSize]="'small'" nz-dropdown [nzDropdownMenu]="theme"><span>{{currentTheme}}</span><i nz-icon type="down"></i></button>
+          <nz-dropdown-menu #theme="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)">
                 <a>{{theme}}</a>
               </li>
             </ul>
-          </nz-dropdown>
+          </nz-dropdown-menu>
         </div>
       </header>
       <a appTheme *ngIf="platform !== 'electron'" (click)="desktop()" class="github-corner" aria-label="Get Jason Tsang's Lab Desktop">
