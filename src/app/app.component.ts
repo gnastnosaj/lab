@@ -45,7 +45,7 @@ import { RxBus } from './rxbus';
           </ul>
         </nz-dropdown-menu>
         <div class="right">
-          <button class="theme" nz-button [nzSize]="'small'" nz-dropdown [nzDropdownMenu]="theme"><span>{{currentTheme}}</span><i nz-icon type="down"></i></button>
+          <button class="theme" nz-button [nzSize]="'small'" nz-dropdown [nzDropdownMenu]="theme"><span>{{currentTheme}}</span><i nz-icon nzType="down"></i></button>
           <nz-dropdown-menu #theme="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)">
