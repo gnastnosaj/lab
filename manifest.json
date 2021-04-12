@@ -1,0 +1,16 @@
+{
+  "name": "Jason Tsang",
+  "short_name": "Jason Tsang",
+  "theme_color": "#535353",
+  "background_color": "#454545",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "assets/images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
