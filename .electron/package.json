@@ -29,13 +29,6 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "maintainer": "Jason Tsang <jasontsagn.dev@gmail.com> (https://jasontsang.dev)",
-            "icon": "src/app.ico"
-          }
-        },
-        {
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "name": "lab",
@@ -43,12 +36,6 @@
             "setupExe": "lab_1.0.0_x64.exe",
             "loadingGif": "src/loading.gif"
           }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
         }
       ]
     }
@@ -68,11 +55,8 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.47",
-    "@electron-forge/maker-deb": "6.0.0-beta.47",
     "@electron-forge/maker-squirrel": "6.0.0-beta.47",
-    "@electron-forge/maker-zip": "6.0.0-beta.47",
     "electron": "7.1.7",
-    "electron-installer-debian": "2.0.1",
     "electron-winstaller": "4.0.0"
   }
 }

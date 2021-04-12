@@ -7,7 +7,7 @@ import { Page } from '../page';
 
 export class EngineImpl extends Engine {
     magneto(keyword: string, index?: number): Observable<Magneto> {
-        return this.http.get(`https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(
+        return this.http.get(`https://www.jasontsang.dev:4096/proxy/?url=${encodeURIComponent(
             `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index - 1}&order=0`
         )}&force=true`, { responseType: 'text' })
             .pipe(
@@ -34,10 +34,10 @@ export class EngineImpl extends Engine {
                     const page: Page = {
                         total: 100,
                         index: 1,
-                        previous: `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(
+                        previous: `https://www.jasontsang.dev:4096/proxy/?url=${encodeURIComponent(
                             `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index - 2}&order=0`
                         )}&force=true`,
-                        next: `https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(
+                        next: `https://www.jasontsang.dev:4096/proxy/?url=${encodeURIComponent(
                             `http://btdig.com/search?q=${encodeURIComponent(keyword)}&p=${index == null ? 0 : index}&order=0`
                         )}&force=true`
                     };

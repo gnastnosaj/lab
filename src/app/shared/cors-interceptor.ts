@@ -10,7 +10,7 @@ const require = global.nodeRequire;
 
 @Injectable()
 export class CorsInterceptor implements HttpInterceptor {
-    private proxy = 'https://www.jasontsang.dev/proxy/?url=';
+    private proxy = 'https://www.jasontsang.dev:4096/proxy/?url=';
     private force = 'force=true';
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

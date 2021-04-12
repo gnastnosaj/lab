@@ -19,7 +19,7 @@ export class ApiService {
 
   loadMore(): Observable<Meizhi[]> {
     return this.http
-      .get(`https://www.jasontsang.dev/proxy/?url=${encodeURIComponent(this.next)}`, { responseType: 'text' })
+      .get(`https://www.jasontsang.dev:4096/proxy/?url=${encodeURIComponent(this.next)}`, { responseType: 'text' })
       .pipe(
         map(html => $.parseHTML(html)),
         map(document => {
