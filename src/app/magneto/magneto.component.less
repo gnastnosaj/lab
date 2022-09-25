@@ -1,0 +1,73 @@
+.container {
+    width: 100%;
+    min-height: calc(100vh - 36px);
+
+    &.empty {
+        height: calc(100vh - 36px);
+    }
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    div {
+        flex: 1;
+    }
+
+    .title {
+        margin-top: 12px;
+        user-select: none;
+        color: #d6d6d6;
+        font-size: 16px;
+    }
+
+    nz-input-group {
+        width: 50%;
+        max-width: 500px;
+        margin-top: 12px;
+
+        i {
+            cursor: pointer;
+        }
+
+        ::ng-deep .ant-input-suffix {
+            z-index: 1;
+        }
+    }
+
+    nz-list {
+        width: 75%;
+        margin-top: 12px;
+        margin-bottom: 12px;
+
+        ::ng-deep .ant-list-item {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+
+            a {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-break: break-all;
+                min-width: 70%;
+                padding-right: 8px;
+            }
+        }
+    }
+}
+
+.loading {
+    position: fixed;
+    top: 36px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    overflow: hidden;
+
+    ::ng-deep svg {
+        width: 100vw !important;
+        height: 100px !important;
+        margin-top: -50px;
+    }
+}

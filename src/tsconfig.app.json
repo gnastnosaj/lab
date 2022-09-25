@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "types": [
+      "jquery", 
+      "fancybox"
+    ]
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "**/*.worker.ts",
+    "app/magneto/engine/*.ts"
+  ]
+}

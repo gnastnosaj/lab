@@ -1,0 +1,29 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import "../node_modules/code-prettify/src/prettify.css";
+
+.ant-dropdown .ant-dropdown-menu,
+.ant-dropdown-menu-sub>ul {
+  border: 1px solid #515151;
+  border-radius: 0px;
+  margin-top: -2px;
+  user-select: none;
+
+  .ant-dropdown-menu-item,
+  .ant-dropdown-menu-item>a,
+  .ant-dropdown-menu-item-selected,
+  .ant-dropdown-menu-item-selected>a,
+  .ant-dropdown-menu-submenu-title,
+  .ant-dropdown-menu-submenu-title-selected,
+  .ant-dropdown-menu-submenu-title-selected>a {
+    color: #d6d6d6 !important;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.ant-dropdown-menu-sub {
+  padding: 0 0 !important;
+}

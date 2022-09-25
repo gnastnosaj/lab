@@ -1,0 +1,34 @@
+<div class="container" [ngClass]="{'empty': !(magneto && magneto.data.length > 0)}">
+    <div></div>
+    <span class="title">Magneto</span>
+    <nz-input-group [nzSuffix]="suffix" [nzAddOnAfter]="addOnAfterIcon">
+        <input nz-input nzSize="default" [formControl]="keyword" />
+        <ng-template #suffix>
+            <i nz-icon nzType="close" nzTheme="outline" *ngIf="keyword.value !== ''" (click)="keyword.setValue('')"></i>
+        </ng-template>
+        <ng-template #addOnAfterIcon>
+            <i nz-icon nzType="search" nzTheme="outline" (click)="load()"></i>
+        </ng-template>
+    </nz-input-group>
+    <nz-list *ngIf="magneto && magneto.data.length > 0" [nzDataSource]="magneto.data" [nzItemLayout]="'vertical'"
+        [nzRenderItem]="item" [nzPagination]="pagination">
+        <ng-template #item let-item>
+            <nz-list-item [nzContent]="content">
+                <ng-template #content>
+                    <a [href]="sanitizer.bypassSecurityTrustUrl(item.magnet)">{{item.title}}</a>
+                    <span>{{item.size}} {{item.addTime}}</span>
+                </ng-template>
+            </nz-list-item>
+        </ng-template>
+        <ng-template #pagination>
+            <nz-pagination [nzSize]="'small'" [nzPageIndex]="magneto.page.index" [nzTotal]="magneto.page.total * 10"
+                (nzPageIndexChange)="load($event)">
+            </nz-pagination>
+        </ng-template>
+    </nz-list>
+    <div *ngIf="!magneto || magneto.data.length === 0"></div>
+    <div></div>
+</div>
+<div class="loading" *ngIf="loading" [ngStyle]="{'transform': transform}">
+    <app-lottie path="assets/lottie/loading.line.{{currentTheme}}.json"></app-lottie>
+</div>

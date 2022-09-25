@@ -1,0 +1,70 @@
+{
+  "name": "lab",
+  "productName": "Jason Tsang's Lab",
+  "description": "Jason Tsang's Lab",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "Jason Tsang",
+    "email": "jasontsang.dev@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "packageManager": "npm",
+        "name": "lab",
+        "icon": "src/app.ico",
+        "appCopyright": "Copyright(C)2022 Jason Tsang",
+        "win32metadata": {
+          "CompanyName": "Jason Tsang",
+          "ProductName": "Jason Tsang's Lab"
+        }
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "lab",
+            "setupIcon": "src/app.ico",
+            "setupExe": "lab_1.0.0_x64.exe",
+            "loadingGif": "src/loading.gif"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "electron": "17.1.2"
+  }
+}
