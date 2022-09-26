@@ -11,7 +11,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { environment } from '../environments/environment';
-import { AiuiComponent } from './aiui/aiui.component';
+import { CognitiveComponent } from './cognitive/cognitive.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BlocklyComponent } from './blockly/blockly.component';
@@ -23,7 +23,7 @@ registerLocaleData(zh);
 @NgModule({
   declarations: [
     AppComponent,
-    AiuiComponent,
+    CognitiveComponent,
     BlocklyComponent
   ],
   imports: [
@@ -44,6 +44,6 @@ registerLocaleData(zh);
     { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AiuiComponent, BlocklyComponent]
+  entryComponents: [CognitiveComponent, BlocklyComponent]
 })
 export class AppModule { }

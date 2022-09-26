@@ -231,8 +231,8 @@ export class AppComponent {
       this.platform = getOS();
     }
 
-    import(/* webpackChunkName: "aiui" */ './aiui/aiui').then(module => {
-      const aiui = this.injector.get(module.AIUI);;
+    import(/* webpackChunkName: "aiui" */ './cognitive/Cognitive').then(module => {
+      const aiui = this.injector.get(module.Cognitive);;
 
       aiui.attach();
 

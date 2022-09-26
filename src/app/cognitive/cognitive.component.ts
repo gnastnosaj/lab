@@ -3,10 +3,10 @@ import Hammer from 'hammerjs';
 import { of, Subscription } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { RxBus } from '../rxbus';
-import { AIUI } from './aiui';
+import { Cognitive } from './Cognitive';
 
 @Component({
-  selector: 'app-aiui',
+  selector: 'app-cognitive',
   template: `
     <app-lottie path="assets/lottie/voice.json" [play]="recording">
     </app-lottie>
@@ -26,11 +26,11 @@ import { AIUI } from './aiui';
     }
   `]
 })
-export class AiuiComponent implements OnInit, AfterViewInit {
+export class CognitiveComponent implements OnInit, AfterViewInit {
   @ViewChild('play')
   play: ElementRef<HTMLDivElement>;
 
-  aiui: AIUI;
+  cognitive: Cognitive;
   recording = false;
   recordSubscription: Subscription;
 
@@ -49,8 +49,8 @@ export class AiuiComponent implements OnInit, AfterViewInit {
   startRecording() {
     if (!this.recording) {
       this.recording = true;
-      this.recordSubscription = this.aiui.record(buffer => {
-        this.aiui.iat(buffer)
+      this.recordSubscription = this.cognitive.record(buffer => {
+        this.cognitive.iat(buffer)
           .pipe(
             map(output => JSON.parse(output)),
             map(args => {
@@ -65,7 +65,7 @@ export class AiuiComponent implements OnInit, AfterViewInit {
             catchError(() => of('这个没听清呢，请你说出要搜索内容哦。'))
           )
           .subscribe(answer => {
-            this.aiui.tts(answer).subscribe(blob => this.aiui.play(blob));
+            this.cognitive.tts(answer).subscribe(blob => this.cognitive.play(blob));
           });
       }).subscribe();
     }

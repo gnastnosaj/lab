@@ -9,7 +9,7 @@ import { soundManager } from 'soundmanager2';
 import CryptoJS from 'crypto-js';
 
 import { RxBus } from '../rxbus';
-import { AiuiComponent } from './aiui.component';
+import { CognitiveComponent } from './cognitive.component';
 
 const global = window as any;
 const require = global.nodeRequire;
@@ -17,7 +17,7 @@ const require = global.nodeRequire;
 @Injectable({
     providedIn: 'root'
 })
-export class AIUI {
+export class Cognitive {
     private readonly baseUrl = 'https://bypass.jasontsang.dev:4096/';
     private readonly appID = '5d26f756';
     private readonly authID = 'edc8e281d86f619df867537291bfe6f3';
@@ -43,9 +43,9 @@ export class AIUI {
             globalPositionStrategy.right('0px');
             globalPositionStrategy.bottom('0px');
             this.overlayRef.updatePositionStrategy(globalPositionStrategy);
-            const componentPortal = new ComponentPortal(AiuiComponent);
+            const componentPortal = new ComponentPortal(CognitiveComponent);
             const componentRef = this.overlayRef.attach(componentPortal);
-            (componentRef.instance as AiuiComponent).aiui = this;
+            (componentRef.instance as CognitiveComponent).cognitive = this;
         }
     }
 
