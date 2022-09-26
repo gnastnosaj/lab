@@ -105,7 +105,7 @@ export class AIUI {
     }
 
     iat(data: any, type: string = 'audio'): Observable<string> {
-        const api = `${this.baseUrl}${encodeURIComponent('http://openapi.xfyun.cn/v2/aiui')}`;
+        const api = `${this.baseUrl}http://openapi.xfyun.cn/v2/aiui`;
         const apiKey = '1ecbf0234231cb1ab47b76ce4376fa7e';
         const param = `{
             "scene": "main",
@@ -130,7 +130,7 @@ export class AIUI {
         if (this.cache[text]) {
             return of(this.cache[text]);
         }
-        const api = `${this.baseUrl}${encodeURIComponent('http://api.xfyun.cn/v1/service/v1/tts')}`;
+        const api = `${this.baseUrl}http://api.xfyun.cn/v1/service/v1/tts`;
         const apiKey = '2c1b18e6aade7ed6e2637d7d8b266034';
         const param = `{"auf": "audio/L16;rate=16000", "aue": "raw", "voice_name": "xiaoyan"}`;
         return this.request(api, apiKey, `text=${encodeURIComponent(text)}`, param, {
