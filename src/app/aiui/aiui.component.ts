@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import Hammer from 'hammerjs';
+import { of, Subscription } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { RxBus } from '../rxbus';
 import { AIUI } from './aiui';
 
@@ -9,7 +10,7 @@ import { AIUI } from './aiui';
   template: `
     <app-lottie path="assets/lottie/voice.json" [play]="recording">
     </app-lottie>
-    <div (mousedown)="startRecording()" (mouseup)="stopRecording()" (mouseout)="stopRecording()">
+    <div #play>
     </div>
   `,
   styles: [`
@@ -25,7 +26,10 @@ import { AIUI } from './aiui';
     }
   `]
 })
-export class AiuiComponent implements OnInit {
+export class AiuiComponent implements OnInit, AfterViewInit {
+  @ViewChild('play')
+  play: ElementRef<HTMLDivElement>;
+
   aiui: AIUI;
   recording = false;
   recordSubscription: Subscription;
@@ -33,7 +37,13 @@ export class AiuiComponent implements OnInit {
   constructor(private rxbus: RxBus) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+    const hammer = new Hammer(this.play.nativeElement);
+    hammer.on('press', () => this.startRecording());
+    hammer.on('pressup', () => this.stopRecording());
   }
 
   startRecording() {

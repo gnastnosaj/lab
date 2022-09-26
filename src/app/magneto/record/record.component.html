@@ -1,0 +1,5 @@
+<div #record>
+    <a [href]="sanitizer.bypassSecurityTrustUrl(magnet.magnet)">{{magnet.title}}</a>
+    <span>{{magnet.size}} {{magnet.addTime}}</span>
+    <button nz-button nzType="default" nzSize="small" [attr.data-clipboard-text]="magnet.magnet"><i nz-icon nzType="copy"></i></button>
+</div>

@@ -28,9 +28,11 @@
     "@better-scroll/pull-up": "^2.4.2",
     "@fancyapps/fancybox": "^3.5.7",
     "blockly": "^7.20211209.4",
+    "clipboard": "^2.0.11",
     "code-prettify": "^0.1.0",
     "core-js": "^3.21.1",
     "crypto-js": "^4.1.1",
+    "hammerjs": "^2.0.8",
     "imagesloaded": "^5.0.0",
     "jquery": "^3.6.0",
     "less": "^4.1.2",
@@ -70,6 +72,9 @@
     "@typescript-eslint/parser": "5.15.0",
     "codelyzer": "^6.0.2",
     "eslint": "^8.11.0",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-jsdoc": "latest",
+    "eslint-plugin-prefer-arrow": "latest",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "jasmine-core": "~4.0.1",
@@ -87,9 +92,6 @@
     "tslint": "~5.20.1",
     "tslint-to-eslint-config": "^2.12.3",
     "typescript": "~4.6.2",
-    "webpack-cli": "^4.9.2",
-    "eslint-plugin-import": "latest",
-    "eslint-plugin-jsdoc": "latest",
-    "eslint-plugin-prefer-arrow": "latest"
+    "webpack-cli": "^4.9.2"
   }
 }

@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import { RxBus } from '../rxbus';
@@ -25,7 +24,7 @@ export class MagnetoComponent implements OnInit, OnDestroy {
   apiSubscription: Subscription;
   magnetoEventObservable: Observable<any>;
 
-  constructor(private api: ApiService, private sanitizer: DomSanitizer, private rxbus: RxBus) {
+  constructor(private api: ApiService, private rxbus: RxBus) {
     const onresize = window.onresize;
     window.onresize = ev => {
       if (onresize instanceof Function) {

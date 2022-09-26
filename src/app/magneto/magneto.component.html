@@ -15,8 +15,7 @@
         <ng-template #item let-item>
             <nz-list-item [nzContent]="content">
                 <ng-template #content>
-                    <a [href]="sanitizer.bypassSecurityTrustUrl(item.magnet)">{{item.title}}</a>
-                    <span>{{item.size}} {{item.addTime}}</span>
+                    <app-record [magnet]="item"></app-record>
                 </ng-template>
             </nz-list-item>
         </ng-template>
