@@ -1,0 +1,17 @@
+<nz-timeline *ngIf="tasks.length > 0" [nzReverse]="true">
+    <nz-timeline-item *ngFor="let task of tasks">
+        {{task.text}}
+        <ng-container *ngIf="!isMobileBrowser">
+            <button nz-button nzType="default" nzSize="small" (click)="replay(task)"><i nz-icon
+                    nzType="caret-right"></i></button>
+            <button nz-button nzType="default" nzSize="small" (click)="save(task)"><i nz-icon
+                    nzType="vertical-align-bottom"></i></button>
+        </ng-container>
+        <audio *ngIf="isMobileBrowser" controls preload="auto" style="width:100%;">
+            <source [src]="task.src" type="audio/wav">
+        </audio>
+    </nz-timeline-item>
+</nz-timeline>
+<ng-container *ngIf="tasks.length === 0">
+    <span nz-icon nzType="small-dash" nzTheme="outline"></span>
+</ng-container>
