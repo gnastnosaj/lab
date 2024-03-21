@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-critters-container>
+
+<head>
+  <meta charset="utf-8">
+  <title>Jason Tsang's Lab</title>
+  <base href="./">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#535353">
+  <meta name="referrer" content="no-referrer">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/images/favicon.png">
+
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0px;
+      padding: 0px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .splash {
+      width: 100vw;
+      height: 100vh;
+      background: #ed1d7f;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .splash img {
+      width: 128px;
+      height: 128px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 16px;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      min-height: 20px;
+      background-clip: content-box;
+      box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
+    }
+
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      border: 5px solid transparent;
+    }
+
+    ::-webkit-scrollbar-track {
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
+    }
+
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      border: 5px solid transparent;
+    }
+  </style>
+<link rel="stylesheet" href="./styles.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="./styles.css"></noscript></head>
+
+<body>
+  <app-root>
+    <div class="splash"><img src="assets/images/favicon.png"></div>
+  </app-root>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <script>
+    if (window.require) {
+      window.nodeRequire = window.require;
+      delete window.require;
+      delete window.exports;
+      delete window.module;
+    }
+  </script>
+<script src="./runtime.js" type="module"></script><script src="./polyfills.js" type="module"></script><script src="./scripts.js" defer></script><script src="./main.js" type="module"></script></body>
+
+</html>
